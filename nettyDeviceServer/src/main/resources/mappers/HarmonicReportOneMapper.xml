@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--配置抽象数据操作接口类-->
+<mapper namespace="com.tony.model.mapper.HarmonicReportOneMapper">
+    <!-- 指定方法名与参数 -->
+    <insert id="insertOrUpdate" parameterType="HarmonicReportOne">
+        <!--sql语句实现-->
+        insert into harmonic_report_one(uuid,imei,channel,reportTime,h1,a1,h3,a3,h5,a5,h7,a7,h9,a9,p,np,rate)
+        values (#{uuid},#{imei},#{channel},#{reportTime},#{h1},#{a1},#{h3},#{a3},#{h5},#{a5},#{h5},#{a7},#{h9},#{a9},#{p},#{np},#{rate})
+        ON DUPLICATE KEY UPDATE
+        reportTime=#{reportTime},h1=#{h1},a1=#{a1},h3=#{h3},a3=#{a3},h5=#{h5},a5=#{a5},h7=#{h7},a7=#{a7},h9=#{h9},a9=#{a9},p=#{p},np=#{np},rate=#{rate}
+        <!-- 这里sql结尾不能加分号，否则报“ORA-00911”的错误 -->
+    </insert>
+</mapper>

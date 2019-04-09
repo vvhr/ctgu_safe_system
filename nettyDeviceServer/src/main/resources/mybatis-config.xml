@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--xml文档合法限定格式-->
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--配置文档链接：http://www.mybatis.org/mybatis-3/zh/configuration.html-->
+<configuration>
+    <!--1、这是 MyBatis 中极为重要的调整设置，它们会改变 MyBatis 的运行时行为-->
+    <settings>
+        <!-- 全局地开启或关闭配置文件中的所有映射器已经配置的任何缓存。 -->
+        <setting name="cacheEnabled" value="false" />
+        <!--允许 JDBC 支持自动生成主键，需要驱动兼容。 如果设置为 true 则这个设置强制使用自动生成主键，尽管一些驱动不能兼容但仍可正常工作（比如 Derby）。-->
+        <setting name="useGeneratedKeys" value="true" />
+       <!--配置默认的执行器。SIMPLE 就是普通的执行器；REUSE 执行器会重用预处理语句（prepared statements）； BATCH 执行器将重用语句并执行批量更新。-->
+        <setting name="defaultExecutorType" value="REUSE" />
+    </settings>
+    <!--2、模型设置-->
+    <typeAliases>
+        <typeAlias alias="DeviceReportOne" type="com.tony.model.DeviceReportOne"/>
+        <typeAlias alias="HarmonicReportOne" type="com.tony.model.HarmonicReportOne"/>
+        <typeAlias alias="DeviceImei" type="com.tony.model.DeviceImei"/>
+        <typeAlias alias="DeviceSetting" type="com.tony.model.DeviceSetting"/>
+        <typeAlias alias="DeviceReportNew" type="com.tony.model.DeviceReportNew"/>
+        <typeAlias alias="HomePortrait" type="com.tony.model.HomePortrait"/>
+        <typeAlias alias="EventRecord" type="com.tony.model.EventRecord"/>
+        <typeAlias alias="Device" type="com.tony.model.Device"/>
+    </typeAliases>
+    <!--3、连接驱动设置-->
+    <!--华为云环境-->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="jdbc"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://127.0.0.1:3306/zhyd_new_proto?serverTimezone=GMT%2B8"/>
+                <property name="username" value="root"/>
+                <property name="password" value=""/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--本地环境-->
+    <!--<environments default="development">-->
+        <!--<environment id="development">-->
+            <!--<transactionManager type="jdbc"/>-->
+            <!--<dataSource type="POOLED">-->
+                <!--<property name="driver" value="com.mysql.cj.jdbc.Driver"/>-->
+                <!--<property name="url" value="jdbc:mysql://127.0.0.1:3306/zhyd_new_proto?serverTimezone=GMT%2B8&amp;useUnicode=true&amp;characterEncoding=utf8"/>-->
+                <!--&lt;!&ndash;<property name="url" value="jdbc:mysql://127.0.0.1:3306/test?serverTimezone=GMT%2B8"/>&ndash;&gt;-->
+                <!--<property name="username" value="root"/>-->
+                <!--<property name="password" value=""/>-->
+            <!--</dataSource>-->
+        <!--</environment>-->
+    <!--</environments>-->
+    <!--4、模型方法映射配置:由接口定义方法，由xml定义实现-->
+    <mappers>
+        <mapper resource="mappers/DeviceReportOneMapper.xml" />
+        <mapper resource="mappers/HarmonicReportOneMapper.xml" />
+        <mapper resource="mappers/DeviceImeiMapper.xml" />
+        <mapper resource="mappers/DeviceSettingMapper.xml" />
+        <mapper resource="mappers/DeviceReportNewMapper.xml" />
+        <mapper resource="mappers/HomePortraitMapper.xml" />
+        <mapper resource="mappers/EventRecordMapper.xml" />
+        <mapper resource="mappers/DeviceMapper.xml" />
+    </mappers>
+</configuration>

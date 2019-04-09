@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--配置抽象数据操作接口类-->
+<mapper namespace="com.tony.model.mapper.DeviceMapper">
+    <!-- 指定方法名与参数 -->
+    <select id="findOne" parameterType="String" resultType="Device">
+        <!--sql语句实现-->
+        SELECT * FROM device WHERE uuid = #{uuid}
+        <!-- 这里sql结尾不能加分号，否则报“ORA-00911”的错误 -->
+    </select>
+</mapper>

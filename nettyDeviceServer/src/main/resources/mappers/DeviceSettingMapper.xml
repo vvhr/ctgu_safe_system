@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--配置抽象数据操作接口类-->
+<mapper namespace="com.tony.model.mapper.DeviceSettingMapper">
+    <!-- 指定方法名与参数 -->
+    <insert id="insertOrUpdate" parameterType="DeviceSetting">
+        <!--sql语句实现-->
+    insert into device_setting(imei,update_time,verified,pwd,pt,ct1,ct2,ct3,ct4,v1,v2,v3,v4,e1,e2,e3,e4,lc1,lc2,lc3,lc4,t1,t2,t3,t4,cef,epem,ad,rttrc,chrp,hc)
+        values (#{imei},#{update_time},#{verified},#{pwd},#{pt},#{ct1},#{ct2},#{ct3},#{ct4},#{v1},#{v2},#{v3},#{v4},#{e1},#{e2},#{e3},#{e4},#{lc1},#{lc2},#{lc3},#{lc4},#{t1},#{t2},#{t3},#{t4},#{cef},#{epem},#{ad},#{rttrc},#{chrp},#{hc})
+    ON DUPLICATE KEY UPDATE update_time=#{update_time},verified=#{verified},pwd=#{pwd},pt=#{pt},ct1=#{ct1},ct2=#{ct2},ct3=#{ct3},ct4=#{ct4},v1=#{v1},v2=#{v2},v3=#{v3},v4=#{v4},e1=#{e1},e2=#{e2},e3=#{e3},e4=#{e4},lc1=#{lc1},lc2=#{lc2},lc3=#{lc3},lc4=#{lc4},t1=#{t1},t2=#{t2},t3=#{t3},t4=#{t4},cef=#{cef},epem=#{epem},ad=#{ad},rttrc=#{rttrc},chrp=#{chrp},hc=#{hc}
+        <!-- 这里sql结尾不能加分号，否则报“ORA-00911”的错误 -->
+    </insert>
+</mapper>

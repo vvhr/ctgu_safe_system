@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--配置抽象数据操作接口类-->
+<mapper namespace="com.tony.model.mapper.DeviceReportOneMapper">
+    <!-- 指定方法名与参数 -->
+    <insert id="insertOrUpdate" parameterType="DeviceReportOne">
+        <!--sql语句实现-->
+        insert into device_report_one(uuid,imei,channel,eHexL,eHexH,aSignHex,v,c,lc,t,eType,eDetailType,eComment,reportTime,enable)
+        values (#{uuid},#{imei},#{channel},#{eHexL},#{eHexH},#{aSignHex},#{v},#{c},#{lc},#{t},#{eType},#{eDetailType},#{eComment},#{reportTime},#{enable})
+        ON DUPLICATE KEY UPDATE
+        eHexL=#{eHexL},eHexH=#{eHexH},aSignHex=#{aSignHex},v=#{v},c=#{c},lc=#{lc},t=#{t},eType=#{eType},eDetailType=#{eDetailType},eComment=#{eComment},reportTime=#{reportTime},enable=#{enable}
+        <!-- 这里sql结尾不能加分号，否则报“ORA-00911”的错误 -->
+    </insert>
+    <insert id="insertOrUpdateException" parameterType="DeviceReportOne">
+        <!--sql语句实现-->
+        insert into exception_report(uuid,imei,channel,eHexL,eHexH,aSignHex,v,c,lc,t,eType,eDetailType,eComment,reportTime,enable)
+        values (#{uuid},#{imei},#{channel},#{eHexL},#{eHexH},#{aSignHex},#{v},#{c},#{lc},#{t},#{eType},#{eDetailType},#{eComment},#{reportTime},#{enable})
+        ON DUPLICATE KEY UPDATE
+        eHexL=#{eHexL},eHexH=#{eHexH},aSignHex=#{aSignHex},v=#{v},c=#{c},lc=#{lc},t=#{t},eType=#{eType},eDetailType=#{eDetailType},eComment=#{eComment},reportTime=#{reportTime},enable=#{enable}
+        <!-- 这里sql结尾不能加分号，否则报“ORA-00911”的错误 -->
+    </insert>
+</mapper>

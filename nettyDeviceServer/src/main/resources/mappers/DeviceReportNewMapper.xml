@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--配置抽象数据操作接口类-->
+<mapper namespace="com.tony.model.mapper.DeviceReportNewMapper">
+    <!-- 指定方法名与参数 -->
+    <insert id="insertOrUpdate" parameterType="DeviceReportNew">
+        <!--sql语句实现-->
+        insert into device_report_new(uuid,imei,channel,v,c,lc,t,h1,h3,h5,h7,h9,a1,a3,a5,a7,a9,p,np,rate,eType,eDetailType,eComment,eHexL,eHexH,aSignHex,enable,reportTime,diffLc,diffT,diffP,diffNp)
+        values (#{uuid},#{imei},#{channel},#{v},#{c},#{lc},#{t},#{h1},#{h3},#{h5},#{h7},#{h9},#{a1},#{a3},#{a5},#{a7},#{a9},#{p},#{np},#{rate},#{eType},#{eDetailType},#{eComment},#{eHexL},#{eHexH},#{aSignHex},#{enable},#{reportTime},#{diffLc},#{diffT},#{diffP},#{diffNp})
+        ON DUPLICATE KEY UPDATE
+        imei=#{imei},channel=#{channel},v=#{v},c=#{c},lc=#{lc},t=#{t},h1=#{h1},h3=#{h3},h5=#{h5},h7=#{h7},h9=#{h9},a1=#{a1},a3=#{a3},a5=#{a5},a7=#{a7},a9=#{a9},p=#{p},np=#{np},rate=#{rate},eType=#{eType},eDetailType=#{eDetailType},eComment=#{eComment},eHexL=#{eHexL},eHexH=#{eHexH},aSignHex=#{aSignHex},enable=#{enable},reportTime=#{reportTime},diffLc=#{diffLc},diffT=#{diffT},diffP=#{diffP},diffNp=#{diffNp}
+        <!-- 这里sql结尾不能加分号，否则报“ORA-00911”的错误 -->
+    </insert>
+    <insert id="insertOrUpdateException" parameterType="DeviceReportNew">
+        <!--sql语句实现-->
+        insert into exception_report_new(uuid,imei,channel,v,c,lc,t,h1,h3,h5,h7,h9,a1,a3,a5,a7,a9,p,np,rate,eType,eDetailType,eComment,eHexL,eHexH,aSignHex,enable,reportTime,diffLc,diffT,diffP,diffNp)
+        values (#{uuid},#{imei},#{channel},#{v},#{c},#{lc},#{t},#{h1},#{h3},#{h5},#{h7},#{h9},#{a1},#{a3},#{a5},#{a7},#{a9},#{p},#{np},#{rate},#{eType},#{eDetailType},#{eComment},#{eHexL},#{eHexH},#{aSignHex},#{enable},#{reportTime},#{diffLc},#{diffT},#{diffP},#{diffNp})
+        ON DUPLICATE KEY UPDATE
+        imei=#{imei},channel=#{channel},v=#{v},c=#{c},lc=#{lc},t=#{t},h1=#{h1},h3=#{h3},h5=#{h5},h7=#{h7},h9=#{h9},a1=#{a1},a3=#{a3},a5=#{a5},a7=#{a7},a9=#{a9},p=#{p},np=#{np},rate=#{rate},eType=#{eType},eDetailType=#{eDetailType},eComment=#{eComment},eHexL=#{eHexL},eHexH=#{eHexH},aSignHex=#{aSignHex},enable=#{enable},reportTime=#{reportTime},diffLc=#{diffLc},diffT=#{diffT},diffP=#{diffP},diffNp=#{diffNp}
+        <!-- 这里sql结尾不能加分号，否则报“ORA-00911”的错误 -->
+    </insert>
+    <insert id="insertException" parameterType="DeviceReportNew">
+        <!--sql语句实现-->
+        insert into exception_report_new(uuid,imei,channel,v,c,lc,t,h1,h3,h5,h7,h9,a1,a3,a5,a7,a9,p,np,rate,eType,eDetailType,eComment,eHexL,eHexH,aSignHex,enable,reportTime,diffLc,diffT,diffP,diffNp)
+        values (#{uuid},#{imei},#{channel},#{v},#{c},#{lc},#{t},#{h1},#{h3},#{h5},#{h7},#{h9},#{a1},#{a3},#{a5},#{a7},#{a9},#{p},#{np},#{rate},#{eType},#{eDetailType},#{eComment},#{eHexL},#{eHexH},#{aSignHex},#{enable},#{reportTime},#{diffLc},#{diffT},#{diffP},#{diffNp})
+        <!-- 这里sql结尾不能加分号，否则报“ORA-00911”的错误 -->
+    </insert>
+</mapper>
