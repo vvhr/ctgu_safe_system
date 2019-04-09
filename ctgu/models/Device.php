@@ -108,8 +108,13 @@ class Device extends \yii\db\ActiveRecord
             $device->imei = $newDevice->imei;
             $device->channel = $newDevice->channel;
             $device->create_time = date('Y-m-d H:i:s');
-            $device->enable = 0;
-            $device->province = '广东省';
+            $device->enable = 1;
+            $device->province = '湖北省';
+            $device->city = '宜昌市';
+            $device->citycode = 717;
+            $device->district = '西陵区';
+            $device->township = '西陵街道';
+            $device->adcode = 420502;
             if($device->save()){
                 array_push($res['successList'],$device);
             }else{

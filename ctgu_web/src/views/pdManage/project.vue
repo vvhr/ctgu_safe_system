@@ -33,9 +33,6 @@
             <el-form-item label="维护人电话" prop="contact_m">
               <el-input v-model="ruleForm.contact_m"></el-input>
             </el-form-item>
-            <el-form-item label="安装数量" prop="install_num">
-              <el-input v-model.number="ruleForm.install_num"></el-input>
-            </el-form-item>
             <el-form-item label="安装时间" prop="installed_at">
               <el-input v-model="ruleForm.installed_at"></el-input>
             </el-form-item>
@@ -50,17 +47,10 @@
             <el-form-item label="项目名称" prop="project_name">
               <el-input v-model="ruleForm.project_name"></el-input>
             </el-form-item>
-            <el-form-item label="项目类型" prop="project_type">
-              <el-input v-model="ruleForm.project_type"></el-input>
-            </el-form-item>
-            <el-form-item label="合同期限" prop="term">
-              <el-input v-model.number="ruleForm.term"></el-input>
-            </el-form-item>
           </el-col>
         </el-row>
         <el-form-item>
           <el-button size="small" type="primary" @click="submitForm('ruleForm')">提交</el-button>
-          <el-button size="small" @click="resetForm('ruleForm')">重置</el-button>
           <el-button size="small" @click="visible.ruleForm = false">关闭</el-button>
         </el-form-item>
       </el-form>
@@ -92,8 +82,6 @@
           {{scope.row.maintenance + ' : ' + scope.row.contact_m}}
         </template>
       </el-table-column>
-      <!--<el-table-column label="合同期限" prop="term" width="100"></el-table-column>-->
-      <el-table-column label="安装数量" prop="install_num" width="80"></el-table-column>
       <el-table-column label="操作" prop="id" width="290">
         <template slot-scope="scope">
           <el-button type="warning" @click = "onClickModifyBtn(scope.row.id)" size="mini"><i class="el-icon-edit"></i> 修改</el-button>
@@ -118,14 +106,13 @@
 
   const defaultRuleForm = {
     // 'id': 0
-    'address': '测试地址',
+    'address': '湖北省宜昌市西陵区西陵街道XX路X苑学生公寓',
     'contact': '13888888888',
     'contact_m': '13888888888',
-    'install_num': 1,
-    'installed_at': '2018-06-30',
-    'maintenance': '测试负责人',
-    'person_liable': '测试维护人',
-    'project_name': '测试项目名称',
+    'installed_at': '2018-11-26 09:35:08',
+    'maintenance': '刘保安',
+    'person_liable': '张保安',
+    'project_name': '三峡大学X苑用电安全监控系统',
     'project_type': 1,
     'term': 1
   }
@@ -170,10 +157,6 @@
             { required: true, message: '请输入', trigger: 'blur' },
             { min: 10, message: '长度在必须是11位', trigger: 'blur' }
           ],
-          install_mum: [
-            { required: true, message: '请输入', trigger: 'blur' },
-            { type: 'number', message: '必须为数字值' }
-          ],
           installed_at: [
             { required: true, message: '请输入', trigger: 'blur' }
           ],
@@ -188,14 +171,6 @@
           project_name: [
             { required: true, message: '请输入', trigger: 'blur' },
             { min: 2, message: '长度在必须大于2', trigger: 'blur' }
-          ],
-          project_type: [
-            { required: true, message: '请输入', trigger: 'blur' },
-            { type: 'number', message: '必须为数字值' }
-          ],
-          term: [
-            { required: true, message: '请输入', trigger: 'blur' },
-            { type: 'number', message: '必须为数字值' }
           ]
         }
       }

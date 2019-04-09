@@ -47,7 +47,7 @@
     </div>
     <!--表格区-->
     <el-table height="600" :data="deviceReports" stripe border :header-cell-style="{textAlign: 'center'}">
-      <el-table-column label="用户" width="260">
+      <el-table-column label="宿舍" width="260">
         <template slot-scope="scope">
           <div>
             <span v-if="scope.row.user">
@@ -57,6 +57,7 @@
             <span style="color: red" v-else>
               <i class="el-icon-news"> 未绑定用户</i>
             </span>
+            <i class="el-icon-location"> {{ scope.row.device.address }} </i>
           </div>
           <div><i class="el-icon-info" title="设备uuid"> {{scope.row.uuid}}</i></div>
         </template>
@@ -80,9 +81,9 @@
       </el-table-column>
       <el-table-column label=" 漏电流(mA) 温度(C) | 电压(V) 电流(A)  有功(W)" width="450" align="center">
         <template slot-scope="scope">
-          <div :style="scope.row.eComment==null?{color: '#409EFF'}:{color: 'orangered'}" v-if="scope.row" @click="onClickChangeChartData(scope.$index)" title="点击可将本通道显示为波形图">
+          <div :style="scope.row.eType===0?{color: '#409EFF'}:{color: 'orangered'}" v-if="scope.row" @click="onClickChangeChartData(scope.$index)" title="点击可将本通道显示为波形图">
             <i class="el-icon-info" style="width: 80px"> {{scope.row.lc}}mA</i>
-            <i class="el-icon-info" style="width: 80px"> {{scope.row.t/10}}C</i> |
+            <i class="el-icon-info" style="width: 80px"> {{scope.row.t/10}}℃</i> |
             <i class="el-icon-info" style="width: 80px"> {{scope.row.v/100}}V</i>
             <i class="el-icon-info" style="width: 80px"> {{scope.row.c/100}}A</i>
             <i class="el-icon-info" style="width: 80px"> {{scope.row.p}}W</i>
@@ -95,7 +96,7 @@
           <!--<span style="color: red" v-if="scope.row.eType === 1">报警</span>-->
           <!--<span style="color: orange" v-else-if="scope.row.eType === 2">故障</span>-->
           <!--<span style="color: #409EFF" v-else>正常</span>-->
-          <span style="color: #409EFF" v-if="new Date(scope.row.reportTime).valueOf() + 600000 < new Date().valueOf()">  设备已断线 </span>
+          <span style="color: #409EFF" v-if="new Date(scope.row.reportTime).valueOf() + heartbeat_Time < new Date().valueOf()">  设备已断线 </span>
           <span style="color: #409EFF" v-else-if="scope.row.eType === 0">正常</span>
           <span style="color: red" v-else-if="scope.row.eType === 1">报警</span>
           <span style="color: orange" v-else>故障</span>
@@ -163,6 +164,7 @@
     data() {
       return {
         person,
+        heartbeat_Time: 60000000, // 监测设备断线的延时
         char01: null,
         chartData: [],
         indexOfListForChartData: 0,

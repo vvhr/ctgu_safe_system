@@ -62,38 +62,15 @@
     </div>
     <!--list列表区-->
     <el-table height="550" :data="list" stripe border fit row-key="id">
-      <el-table-column label="id" prop="id" width="50"></el-table-column>
-      <el-table-column label="用户名" prop="username" width="100"></el-table-column>
-      <el-table-column label="真实姓名" prop="realname" width="80"></el-table-column>
-      <el-table-column label="电话" prop="phone" width="130"></el-table-column>
-      <el-table-column label="用户组" prop="user_group_id" width="80"></el-table-column>
-      <el-table-column label="关联微信账户" width="500">
-        <template slot-scope="scope">
-          <div v-if="scope.row.wxUsers.length > 0">
-            <div v-for="wxUser in scope.row.wxUsers" style="display: flex">
-              <img :src="wxUser.headimgurl" alt="用户头像" style="width: 30px;height: 30px">
-              &nbsp;
-              <el-switch
-                @change="onSwitchEnableReceiveMsg(wxUser)"
-                title="是否接收事件推送"
-                style="display: block"
-                v-bind:value="wxUser.enable_receive_msg === 1"
-                active-color="#13ce66"
-                inactive-color="#ff4949">
-              </el-switch>
-              &nbsp;
-              {{wxUser.nickname}}
-            </div>
-          </div>
-          <div v-else>
-            <span style="color: red">该账号未与任何微信账号绑定</span>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="200">
+      <!--<el-table-column label="id" prop="id" width="50"></el-table-column>-->
+      <el-table-column label="用户名" prop="username" width="300"></el-table-column>
+      <el-table-column label="真实姓名" prop="realname" width="300"></el-table-column>
+      <el-table-column label="电话" prop="phone" width="200"></el-table-column>
+      <el-table-column label="用户组" prop="user_group_id"></el-table-column>
+      <el-table-column label="操作" width="300">
         <template slot-scope="scope">
           <el-button-group>
-            <el-button size="mini" type="warning" @click = "onClickModifyBtn(scope.row)"><i class="el-icon-edit"></i> 修改</el-button>
+            <el-button size="mini" type="danger" @click = "onClickModifyBtn(scope.row)"><i class="el-icon-edit"></i> 修改</el-button>
             <el-button size="mini" type="primary" v-if="scope.row.user_group_id === 3" @click = "onClickShowUserDeviceBtn(scope.row)"><i class="el-icon-delete"></i> 关联设备</el-button>
           </el-button-group>
         </template>

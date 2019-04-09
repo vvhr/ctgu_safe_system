@@ -50,44 +50,18 @@
                 <el-button type="primary" class="place-change-btn" size="mini" @click="onClickShowDeviceUnWork" icon="el-icon-time">实时状态</el-button>
               </div>
             </div>
-            <!--监控电器-->
-            <div class="left-label-son-06">
-              <div class="label-son-title">
-                <div class="label-son-title-number">{{totalCount.appliances}}</div>
-              </div>
-            </div>
-            <!--运行电器-->
-            <div class="left-label-son-07">
-              <div class="label-son-title">
-                <div class="label-son-title-number">{{totalCount.runApps}}</div>
-                <el-button type="primary" class="place-change-btn" size="mini" @click="visible.runApps = true" icon="el-icon-search">查看详情</el-button>
-              </div>
-            </div>
-            <!--高位电器-->
-            <div class="left-label-son-08">
-              <div class="label-son-title">
-                <div class="label-son-title-number" :style="numberColorChange(totalCount.riskApps)">{{totalCount.riskApps}}</div>
-              </div>
-            </div>
-            <!--高位电器运行中-->
-            <div class="left-label-son-11">
-              <div class="label-son-title">
-                <div class="label-son-title-number" :style="numberColorChange(totalCount.runRiskApps)">{{totalCount.runRiskApps}}</div>
-                <el-button type="warning " class="place-change-btn" size="mini" @click="visible.riskApp = true" icon="el-icon-search">查看详情</el-button>
-              </div>
-            </div>
             <!--按钮组-->
             <div class="button-group">
               <el-row style="text-align: center;padding: 40px 5px 5px;">
-                <el-button style="width: 100px;height: 70px" @click="onClickShowAlarms">
+                <el-button style="width: 100px;height: 70px" @click="onClickShowAlarms" :disabled="true">
                   <i class="el-icon-warning" style="font-size: 30px;margin-bottom: 3px"></i><br />
                   <a class="" style="font-weight: bold">报警记录</a>
                 </el-button>
-                <el-button style="width: 100px;height: 70px" @click="visible.sendMassage = true">
+                <el-button style="width: 100px;height: 70px" @click="visible.sendMassage = true" :disabled="true">
                   <i class="el-icon-mobile-phone" style="font-size: 30px;margin-bottom: 3px"></i><br />
                   <a class="" style="font-weight: bold">短信记录</a>
                 </el-button>
-                <el-button style="width: 100px;height: 70px" @click="visible.event_record = true">
+                <el-button style="width: 100px;height: 70px" @click="visible.event_record = true" :disabled="true">
                   <i class="el-icon-question" style="font-size: 30px;margin-bottom: 3px"></i><br />
                   <a class="" style="font-weight: bold">漏电分析</a>
                 </el-button>
@@ -101,7 +75,7 @@
                   <i class="el-icon-menu" style="font-size: 30px;margin-bottom: 3px"></i><br />
                   <a class="" style="font-weight: bold">项目管理</a>
                 </el-button>
-                <el-button style="width: 100px;height: 70px" @click="visible.alarmHandel = true">
+                <el-button style="width: 100px;height: 70px" @click="visible.alarmHandel = true" :disabled="true">
                   <i class="el-icon-share" style="font-size: 30px;margin-bottom: 3px"></i><br />
                   <a class="" style="font-weight: bold">异常维护  </a>
                 </el-button>
@@ -111,7 +85,6 @@
           <!--左栏 end-->
           <!--中部-->
           <div class="center-label">
-            <el-button class="exit" style="float: right;position: relative;top: -35px;right: 10px" size="mini" type="success" icon="el-icon-d-caret" @click="onClickChangeMapSize">切换无障碍模式</el-button>
             <el-tooltip placement="top">
               <div slot="content">
                 当前主题: {{mapStyles[settingForm.defaultMapStyleId].name}}<br/>
@@ -172,25 +145,15 @@
                 </table>
               </div>
             </div>
-            <div class="chart-label">
-              <div class="" id="home-chart-01"></div>
-            </div>
           </div>
           <!--中部 end-->
           <!--右栏-->
           <div class="right-label">
-            <!--本月报警-->
+            <!--违章提醒-->
             <div class="right-label-son-03">
               <div class="label-son-title">
-                <div class="label-son-title-text" style="font-size: 30px">{{deviceExceptionTotal_month}}</div>
-                <el-button type="primary" class="label-son-btn" size="mini" @click="onClickShowAlarms('month')" icon="el-icon-bell">本月报警</el-button>
-              </div>
-            </div>
-            <!--今日报警-->
-            <div class="right-label-son-04">
-              <div class="label-son-title">
-                <div class="label-son-title-text" style="font-size: 30px" :style="numberColorChange(deviceExceptionTotal_day)">{{deviceExceptionTotal_day}}</div>
-                <el-button type="primary" class="label-son-btn" size="mini" @click="onClickShowAlarms('today')" icon="el-icon-bell">今日报警</el-button>
+                <div class="label-son-title-text" style="font-size: 30px">{{totalCount.illegal}}</div>
+                <el-button type="primary" class="label-son-btn" size="mini" @click="onClickShowAlarmsManage(3)" icon="el-icon-bell">查看违章</el-button>
               </div>
             </div>
             <!--实时报警-->
@@ -213,9 +176,8 @@
                 <ul>
                   <li v-for="(v,k) in deviceExceptionTotalByDistrict" :key="k">
                     <div style="width: 120px;background: #0251a1;color: #01f8fb;font-weight: bold;">{{k}}</div>
-                    <div style="width: 110px;background: rgb(4, 67, 132);color: rgb(0, 243, 255)">用户 {{v.deviceCount}} 户</div>
+                    <div style="width: 110px;background: rgb(4, 67, 132);color: rgb(0, 243, 255)">监控 {{v.deviceCount}} 户</div>
                     <div style="width: 110px;background: #043567;color:rgb(255, 212, 0)">月报警 {{v.exceptionCount}} 次</div>
-                    <el-button type="primary" size="mini" style="padding-right: 6px;padding-left: 6px" icon="el-icon-search" @click="onClickShowAlarms('month')"></el-button>
                   </li>
                 </ul>
               </div>
@@ -349,7 +311,6 @@
 </template>
 <script>
   import { Loading } from 'element-ui'
-  import { getChartInstance, getChartOption } from '../../utils/charts'
   import { loadAMap, selectedAddressToParams } from '../../utils/AMap'
   import { getDevices, getDeviceTotalGroupByDistrict } from '../../api/device'
   import { getDevicesTotalCount } from '../../api/deviceReportNew'
@@ -398,10 +359,7 @@ export default {
           runDevices: 0,
           alarms: 0,
           unWork: 0,
-          appliances: 0,
-          runApps: 0,
-          riskApps: 0,
-          runRiskApps: 0
+          illegal: 0
         },
         states: {
           '0': '正常',
@@ -423,41 +381,21 @@ export default {
           deviceExceptionTotal_day: true,
           total: true
         },
-        // 当月报警总数：直接请求接口获取
-        deviceExceptionTotal_month: 0,
-        // 当天报警总数：直接请求接口获取
-        deviceExceptionTotal_day: 0,
         exceptionTotalGroupByMonthOfYear: [],
         searchForm: { enable: 1, pageSize: 10000 },
         mapOption: {
           buildingAnimation: true, // 楼块出现是否带动画
           zoom: 17,
-          center: [114.070719, 22.658496],
+          center: [111.321678, 30.723026],
           layers: [],
           viewMode: '3D',
           mapStyle: 'amap://styles/light'
         },
-        chart01: null,
-        year: '2018',
-        year_options: [
-          {
-            value: '2018',
-            label: '2018年度'
-          },
-          {
-            value: '2017',
-            label: '2017年度'
-          },
-          {
-            value: '2016',
-            label: '2016年度'
-          }
-        ],
         // 新UI
         nowTime: '获取时间中 ...',
         loadingInstance: null, // 全局加载动画
         info: [
-          '尊敬的用户 : ' + this.$store.getters.name + ' 您好! 专注城市用电安全 , 华建智慧用电安全监控平台欢迎您! 华建官网: www.hjdlwl.com '
+          '尊敬的用户 : ' + this.$store.getters.name + ' 您好! 欢迎使用三峡大学智慧用电安全监控平台!本平台将实时为您提供所有监控设备的最新状况! '
         ],
         timer: null,
         activeDevice: {},
@@ -466,8 +404,6 @@ export default {
           devicesInfo: true,
           mapDeviceInfo: false,
           devicesManage: false,
-          runApps: false,
-          riskApp: false,
           alarms: true,
           sendMassage: false,
           event_record: false,
@@ -590,10 +526,6 @@ export default {
         this.infoWindow.open(this.map, [device.lon, device.lat])
         this.visible.mapDeviceInfo = true
       },
-      createChart01() {
-        this.chart01 = getChartInstance('home-chart-01')
-        this.chart01.setOption(getChartOption('line', this.exceptionTotalGroupByMonthOfYear, '月度报警次数', '月'), true)
-      },
       createMap() {
         return loadAMap().then(AMap => {
           this.AMap = AMap
@@ -603,7 +535,6 @@ export default {
       // 刷新设备数据
       RefreshDevices() {
         return getDevices(this.finalSearchForm).then(data => {
-          this.map.clearMap()
           this.list = data._items
           // 从device表获取设备总数
           this.totalCount.device = data._meta.totalCount
@@ -639,11 +570,6 @@ export default {
           getHomePortraits(Object.assign({}, addressParams, { is_high: 1, state: 1 })).then(res => {
             this.totalCount.runRiskApps = res._items.length
           })
-          // 地图标记物不能自动根据状态反应变化，必须手动添加
-          this.addMarkerByList(this.list)
-          if (this.list.length <= 0) {
-            this.$message({ message: '该区域没有查询到设备', type: 'success' })
-          }
         })
       },
       // 获取设备列表带关联地理坐标
@@ -852,9 +778,6 @@ export default {
         } else this.settingForm.defaultMarkStyleId = this.settingForm.defaultMarkStyleId + 1
         this.init()
       },
-      onClickChangeMapSize() {
-
-      },
       onClickSetting() {
         console.log('我的设置 =>', this.settingForm)
         const mySetting = JSON.parse(localStorage.getItem('defaultSetting'))
@@ -907,16 +830,6 @@ export default {
         if (this.fullScreen === false) this.exitFullScreen()
       },
       /** 点击事件 */
-      // 显示报警记录
-      onClickShowAlarms(params) {
-        if (params === 'today') {
-          this.$refs.alarms.fetchAlarmListForHome('today')
-        } else if (params === 'month') {
-          this.$refs.alarms.fetchAlarmListForHome('month')
-        } else this.$refs.alarms.fetchAlarmListForHome('all')
-        this.visible.alarms = true
-        // console.log(params)
-      },
       // 显示实时报警
       onClickShowAlarmsManage(type) {
         this.$refs.alarmsManage.fetchLastAlarmList(type)
@@ -973,13 +886,6 @@ export default {
 <style scoped>
   /*div{border: dashed 1px grey;}*/
   /*.app-container{color: #666;}*/
-  .title{font-weight: bolder}
-  .box-shadow-deep{box-shadow: 10px 10px 3px black;}
-  .box-shadow{box-shadow: 3px 3px 3px black;}
-  .app-container{background: rgb(20, 40, 60);height: 100%}
-
-  .app-container-row-02{display: flex}
-  .app-container-row-04{margin: 0 15px;background: white}
 
   .app-container-row-02 .summary-box{width: 25%;min-width: 200px;padding: 15px;display: flex;line-height: 80px;font-size: 20px;text-align: center;font-weight: bolder}
   .app-container-row-02 .summary-box .left{width: 40%;color: white;border-radius: 10px 0 0 10px;}
@@ -996,7 +902,6 @@ export default {
 
   /* new_style */
   .app-container-row-03{display: flex;padding-bottom: 13px;;}
-  #home-chart-01{height: 200px;left: 20px;}
   .home-container {width:100%;margin: 0;}
   .home-container-bg {
     height:1080px;
@@ -1017,7 +922,6 @@ export default {
   }
   .row-01 { width: 1700px; justify-content: space-around; display: inline-flex;}
   .label-son-title-text { font-size: 14px;color: #0dfdf3;font-weight: bold;width: 160px;text-align: center }
-  .label-son-title-number { font-size: 27px;color: #0dfdf3;font-weight: bold;width: 160px;text-align: center;left: 20px;position: relative; }
   .place-change-btn { width: 80px;height: 40px;padding-left: 5px;padding-right: 5px;left: 25px;position: relative;color: #fff;}
   .label-son-btn { width: 80px;height: 40px;padding-left: 5px;padding-right: 5px;left: 10px;position: relative;color: #fff;}
 
@@ -1026,17 +930,8 @@ export default {
   .row-01 .left-label .left-label-son-01 {margin-bottom: 10px;background: url('../../../static/image/label/01.png') no-repeat;background-size: contain;width: 420px;height: 70px;position: relative;}
   .row-01 .left-label .left-label-son-02 {margin-bottom: 10px;background: url('../../../static/image/label/02.png') no-repeat;background-size: contain;width: 420px;height: 70px;position: relative;}
   .row-01 .left-label .left-label-son-05 {margin-bottom: 10px;background: url('../../../static/image/label/shishi.png') no-repeat;background-size: contain;width: 420px;height: 70px;position: relative;}
-  .row-01 .left-label .left-label-son-06 {margin-bottom: 10px;background: url('../../../static/image/label/jiankongzongshu.png') no-repeat;background-size: contain;width: 420px;height: 70px;position: relative;}
-  .row-01 .left-label .left-label-son-07 {margin-bottom: 10px;background: url('../../../static/image/label/jiankongyunxingz.png') no-repeat;background-size: contain;width: 420px;height: 70px;position: relative;}
-  .row-01 .left-label .left-label-son-08 {margin-bottom: 10px;background: url('../../../static/image/label/gaowei.png') no-repeat;background-size: contain;width: 420px;height: 70px;position: relative;}
-  .row-01 .left-label .left-label-son-11 {margin-bottom: 10px;background: url('../../../static/image/label/gaoweiyunxingzhong.png') no-repeat;background-size: contain;width: 420px;height: 70px;position: relative;}
   .row-01 .left-label .label-son-title { width: 400px; height: 40px;display: inline-flex;align-items:center;padding-left: 150px;padding-top: 25px}
   .row-01 .center-label {background: url('../../../static/image/label/border-map.png') no-repeat;background-size: contain;width: 800px;position: relative;padding-top: 45px;}
-  .row-01 .center-map {}
-  .chart-label {margin-bottom: 10px;background: url('../../../static/image/label/border-chart.png') no-repeat;background-size: contain;width: 800px;height: 220px;position: relative}
-  .message-label {margin-bottom: 10px;background: url('../../../static/image/label/border-message.png') no-repeat;background-size: contain;height: 350px;position: relative;}
-  .msg-content {width: 388px;margin-left: 6px;overflow: auto;height: 275px;}
-  .msg-table {color: #a0cfff;height: 330px;width: 100%;font-size: 12px;}
   .msg-table td {background: rgba(29, 102, 172, 0.62);border-bottom: solid thin #0dfdf3;line-height: 16px;text-align: left;border-left-width: 0px;padding: 3px;}
   .map-side-left {background: url('../../../static/image/label/map-side-left.png') no-repeat;background-size: cover;height: 323px;width: 20px;top: 130px;left: -2px;z-index: 1000;float: outside;position: absolute;}
   .map-side-right {background: url('../../../static/image/label/map-side-right.png') no-repeat;background-size: cover;height: 323px;width: 20px;top: 130px;left: 780px;z-index: 1000;float: outside;position: absolute;}
@@ -1044,13 +939,11 @@ export default {
   /*右边*/
   .row-01 .right-label {width: 400px;position: relative;}
   .row-01 .right-label .label-son-title { width: 400px; height: 40px;display: inline-flex;align-items:center;padding-left: 150px;padding-top: 25px}
-  .row-01 .right-label .right-label-son-03 {margin-bottom: 10px;background: url('../../../static/image/label/03.png') no-repeat;background-size: contain;width: 400px;height: 70px;position: relative;}
-  .row-01 .right-label .right-label-son-04 {margin-bottom: 10px;background: url('../../../static/image/label/04.png') no-repeat;background-size: contain;width: 400px;height: 70px;position: relative;}
+  .row-01 .right-label .right-label-son-03 {margin-bottom: 10px;background: url('../../../static/image/label/weizhang.png') no-repeat;background-size: contain;width: 400px;height: 70px;position: relative;}
   .row-01 .right-label .right-label-son-09 {margin-bottom: 10px;background: url('../../../static/image/label/guzhang.png') no-repeat;background-size: contain;width: 400px;height: 70px;position: relative;}
   .row-01 .right-label .right-label-son-10 {margin-bottom: 10px;background: url('../../../static/image/label/baojing.png') no-repeat;background-size: contain;width: 400px;height: 70px;position: relative;}
   .row-01 .right-label .right-label-son-xiaqu {margin-bottom: 10px;background: url('../../../static/image/label/border-xiaqu-tm.png') no-repeat;background-size: cover;width: 400px;height: 450px;position: relative;}
-  .on-detail-btn { width: 60px; padding-left: 5px;margin-left: 150px;margin-bottom: 20px;}
-  .row-02 {width: 1800px;justify-content: space-between;display: inline-flex;}
+
   .row-02 .left-label {background: url('../../../static/image/border-foot.png') no-repeat;background-size: contain;width: 800px;height: 220px;position: relative;}
   .row-02 .right-label {background: url('../../../static/image/border-foot.png') no-repeat;background-size: contain;width: 700px;height: 220px;position: relative;}
   .xiaqu-list { margin-left: 4px;width: 98%;height: 400px;background: rgba(8, 83, 148, 0.4);padding: 10px;overflow-y: auto;overflow-x: hidden;position: relative;top: 45px}

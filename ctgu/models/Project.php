@@ -40,7 +40,6 @@ class Project extends \yii\db\ActiveRecord
     {
         return [
             [['project_type', 'region_id', 'term', 'install_num', 'operator_user_id'], 'integer'],
-            [['region_id'], 'required'],
             [['project_name'], 'unique'],
             [['created_at', 'installed_at'], 'safe'],
             [['is_del'], 'boolean'],

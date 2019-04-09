@@ -6,8 +6,8 @@
         <el-form-item label="设备uuid">
           <el-input v-model="searchForm.uuid" placeholder="请输入设备uuid编号"></el-input>
         </el-form-item>
-        <el-form-item label="用户名">
-          <el-input v-model="searchForm.username" placeholder="请输入用户名"></el-input>
+        <el-form-item label="房间号">
+          <el-input v-model="searchForm.address" placeholder="请输入房间地址"></el-input>
         </el-form-item>
         <el-form-item label="启用状态">
           <el-select v-model="searchForm.enable" placeholder="请选择">
@@ -48,7 +48,7 @@
           <el-button-group>
             <el-button type="primary" icon="el-icon-search" @click="onClickSearchBtn">查询</el-button>
             <el-button type="primary" icon="el-icon-refresh" @click="onClickResetBtn">重置</el-button>
-            <el-button type="success" icon="el-icon-upload2" @click="">EXCEL导出</el-button>
+            <!--<el-button type="success" icon="el-icon-upload2" @click="">EXCEL导出</el-button>-->
             <el-button type="success" icon="el-icon-download" @click="onClickBulkAddDeviceBtn">从实时上报表中批量导入</el-button>
           </el-button-group>
         </el-form-item>
@@ -110,8 +110,9 @@
           <div><i class="el-icon-info" title="设备uuid"> {{scope.row.uuid}}</i></div>
           <!--项目信息-->
           <div>
-            <span v-if="scope.row.project"><i class="el-icon-news"> {{ scope.row.project.project_name}}</i></span>
-            <span style="color: red" v-else><i class="el-icon-news" style="color: red"> 未绑定项目</i></span>
+            [房间号] {{ scope.row.address }}
+            <!--<span v-if="scope.row.project"><i class="el-icon-news"> {{ scope.row.project.project_name}}</i></span>-->
+            <!--<span style="color: red" v-else><i class="el-icon-news" style="color: red"> 未绑定项目</i></span>-->
           </div>
         </template>
       </el-table-column>
@@ -319,7 +320,7 @@
         mapOption: {
           zoom: 18,
           // zooms: [4, 18],
-          center: [114.070719, 22.658496],
+          center: [111.321678, 30.723026],
           layers: [],
           viewMode: '2D'
         },
@@ -454,7 +455,7 @@
       },
       // 用户远程搜索
       fetchUsers(value) {
-        getUsers({ username: value, user_group_id: 3 }).then(res => {
+        getUsers({ username: value }).then(res => {
           console.log('this.users>>', res)
           this.users = res._items
           this.usersLoading = false

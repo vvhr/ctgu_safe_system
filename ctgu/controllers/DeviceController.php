@@ -34,6 +34,8 @@ class DeviceController extends ParentController
             $query->andFilterWhere(['device.state'=>$params['state']]);
         if(isset($params['uuid']))
             $query->andWhere(['like', 'device.uuid', trim($params['uuid'])]);
+        if(isset($params['address']))
+            $query->andWhere(['like', 'device.address', trim($params['address'])]);
         if(isset($params['enable']))
             $query->andFilterWhere(['device.enable'=>$params['enable']]);
         if(isset($params['user_id']))

@@ -5,20 +5,6 @@
     </div>
     <el-form class="login-form" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
       <div class="login-input">
-        <!--选择框-->
-        <el-form-item prop="role">
-          <span class="svg-container svg-container_login"><svg-icon icon-class="example" /></span>
-          <el-select v-model="loginForm.role_id" placeholder="请选择" size="small" style="width: 250px">
-            <div class="login-role-select">
-              <el-option
-                v-for="item in roles"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </div>
-          </el-select>
-        </el-form-item>
         <!--登录框-->
         <el-form-item prop="username">
           <span class="svg-container svg-container_login"><svg-icon icon-class="user" /></span>
@@ -255,7 +241,8 @@
       }
     }
     .login-title {
-      background: url('../../../static/image/login_title.png');
+      background: url('../../../static/image/login_title.png') no-repeat;
+      background-size: contain;
       position: fixed;
       left: 1170px;
       right: 0;
