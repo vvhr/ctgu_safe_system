@@ -24,13 +24,6 @@ export function updateDevice(data) {
   })
 }
 
-export function enableDevice(data) {
-  return request({
-    url: '/device/enable-device',
-    method: 'post',
-    data: data
-  })
-}
 // 从mongodb上报记录表中抽出唯一的设备列表，对比mysql中的设备列表，imei不存的设备将插入设备表，并在通道表中插入相应的通道。
 export function bulkAddDevice(data) {
   return request({

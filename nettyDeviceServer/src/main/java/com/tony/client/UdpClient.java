@@ -19,9 +19,19 @@ public final class UdpClient {
     private static final int PORT = Integer.parseInt(System.getProperty("port", "2060"));
     /*通信地址对象：主机名，端口*/
     private static final InetSocketAddress ADDRESS = SocketUtils.socketAddress("localhost", PORT);
-
-    // 客户端发送UDP包
+    // 模拟客户端
     public static void main(String[] args) throws Exception {
+        for(int i=1;i<50;i++){
+            int index = (int)System.currentTimeMillis()%6;
+            System.out.println(index);
+            String messageContent = MockMessage.newProtoMessageArray[index];
+            client(i, messageContent);
+            Thread.sleep(1000);
+        }
+    }
+    // 客户端发送UDP包
+    private static void client(int i, String messageContent) throws Exception {
+        DebugUtil.println("-->ctx " + i + " start");
         /*分组循环查询事件-事件处理器*/
         EventLoopGroup group = new NioEventLoopGroup();
         try {
@@ -37,14 +47,15 @@ public final class UdpClient {
                     .option(ChannelOption.SO_BROADCAST, true)
                     /*设置业务逻辑处理器*/
                     .handler(new UdpClientHandler());
+
+            // 绑定0是表示向所有端口广播？？？因为如果用7686，则会提示端口被占用，因为这里，用的是bind而不是connect
+            /*绑定接收监听的端口，设置为异步，使用channel()方法获得通道实例*/
             // 绑定端口0表示，系统内核会自动分配一个可用端口给他。这样就可以同时使用多个客户端了。
             Channel ch = bootstraper.bind(0).sync().channel();
             /*发送的内容*/
-            DebugUtil.println("-->send to server : ");
-            /*内容打包发送*/
-            int index = (int)(Math.random()*10%3);
-            DebugUtil.println("模拟值索引index：" + index);
-            DatagramPacket msg = Message.getMessage(MockMessage.newProtoMessageArray[index], ADDRESS, true);
+            DebugUtil.println("-->send to server : " + messageContent);
+            /*内容打包*/
+            DatagramPacket msg = Message.getMessage(messageContent, ADDRESS, true);
             /*通道对象IO操作*/
             ch.writeAndFlush(msg).sync();
             // 设置通道异步关闭的等待时间，如果设置了等待时间，那么超时则会强制关闭

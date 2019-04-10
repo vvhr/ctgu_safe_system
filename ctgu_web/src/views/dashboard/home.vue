@@ -47,21 +47,21 @@
             <div class="left-label-son-05">
               <div class="label-son-title">
                 <div class="label-son-title-text" style="font-size: 30px">{{totalCount.runDevices}}</div>
-                <el-button type="primary" class="place-change-btn" size="mini" @click="onClickShowDeviceUnWork" icon="el-icon-time">实时状态</el-button>
+                <el-button type="primary" class="place-change-btn" size="mini" @click="onClickShowDevices" icon="el-icon-time">实时状态</el-button>
               </div>
             </div>
             <!--按钮组-->
             <div class="button-group">
               <el-row style="text-align: center;padding: 40px 5px 5px;">
-                <el-button style="width: 100px;height: 70px" @click="onClickShowAlarms" :disabled="true">
+                <el-button style="width: 100px;height: 70px" :disabled="true">
                   <i class="el-icon-warning" style="font-size: 30px;margin-bottom: 3px"></i><br />
                   <a class="" style="font-weight: bold">报警记录</a>
                 </el-button>
-                <el-button style="width: 100px;height: 70px" @click="visible.sendMassage = true" :disabled="true">
+                <el-button style="width: 100px;height: 70px" :disabled="true">
                   <i class="el-icon-mobile-phone" style="font-size: 30px;margin-bottom: 3px"></i><br />
                   <a class="" style="font-weight: bold">短信记录</a>
                 </el-button>
-                <el-button style="width: 100px;height: 70px" @click="visible.event_record = true" :disabled="true">
+                <el-button style="width: 100px;height: 70px" :disabled="true">
                   <i class="el-icon-question" style="font-size: 30px;margin-bottom: 3px"></i><br />
                   <a class="" style="font-weight: bold">漏电分析</a>
                 </el-button>
@@ -75,7 +75,7 @@
                   <i class="el-icon-menu" style="font-size: 30px;margin-bottom: 3px"></i><br />
                   <a class="" style="font-weight: bold">项目管理</a>
                 </el-button>
-                <el-button style="width: 100px;height: 70px" @click="visible.alarmHandel = true" :disabled="true">
+                <el-button style="width: 100px;height: 70px" :disabled="true">
                   <i class="el-icon-share" style="font-size: 30px;margin-bottom: 3px"></i><br />
                   <a class="" style="font-weight: bold">异常维护  </a>
                 </el-button>
@@ -152,22 +152,22 @@
             <!--违章提醒-->
             <div class="right-label-son-03">
               <div class="label-son-title">
-                <div class="label-son-title-text" style="font-size: 30px">{{totalCount.illegal}}</div>
-                <el-button type="primary" class="label-son-btn" size="mini" @click="onClickShowAlarmsManage(3)" icon="el-icon-bell">查看违章</el-button>
+                <div class="label-son-title-text" style="font-size: 30px" :style="numberColorChange(totalCount.illegal)">{{totalCount.illegal}}</div>
+                <el-button type="primary" class="label-son-btn" size="mini" @click="onClickShowDevices(2)" icon="el-icon-bell">查看违章</el-button>
               </div>
             </div>
             <!--实时报警-->
             <div class="right-label-son-10">
               <div class="label-son-title">
-                <div class="label-son-title-text" style="font-size: 30px">{{totalCount.alarms}}</div>
-                <el-button type="danger" class="label-son-btn" size="mini" @click="onClickShowAlarmsManage(1)" icon="el-icon-search">查看报警</el-button>
+                <div class="label-son-title-text" style="font-size: 30px" :style="numberColorChange(totalCount.alarms)">{{totalCount.alarms}}</div>
+                <el-button type="danger" class="label-son-btn" size="mini" @click="onClickShowDevices(3)" icon="el-icon-search">查看报警</el-button>
               </div>
             </div>
             <!--实时故障-->
             <div class="right-label-son-09">
               <div class="label-son-title">
                 <div class="label-son-title-text" style="font-size: 30px" :style="numberColorChange(totalCount.unWork)">{{totalCount.unWork}}</div>
-                <el-button type="warning" class="label-son-btn" size="mini" @click="onClickShowDeviceUnWork(2)" icon="el-icon-search">查看故障</el-button>
+                <el-button type="warning" class="label-son-btn" size="mini" @click="onClickShowDevices(1)" icon="el-icon-search">查看故障</el-button>
               </div>
             </div>
             <!--街道详情-->
@@ -317,7 +317,6 @@
   import { getDeviceExceptionTotal, getTotalGroupByDistrict, getTotalGroupByMonthOfYear } from '../../api/exceptionReportNew'
   import { parseTime } from '../../utils'
   // import { getSmsList } from '../../api/smsLog'
-  import { getAppTotalCount } from '../../api/HomePortrait'
   import devicesInfo from '../monitor/newInfo'
   import myMarquee from './components/myMarquee'
   import alarms from '../history/alarm'
@@ -331,7 +330,6 @@
   // import user from '../pdManage/user'
   // import project from '../pdManage/project'
   // import alarmHandel from '../maintain/alarm'
-  import { getHomePortraits } from '../../api/HomePortrait'
   import { getDeviceReportOne } from '../../api/deviceReportNew'
 
 export default {
@@ -544,31 +542,16 @@ export default {
             this.totalCount.runDevices = res
           })
           // 从device_report_new获取故障总数
-          getDevicesTotalCount(Object.assign({}, addressParams, { eType: 2 })).then(res => {
+          getDevicesTotalCount(Object.assign({}, addressParams, { unWork: 1 })).then(res => {
             this.totalCount.unWork = res
           })
-          // 从device_report_new获取未处理的报警总数
-          getDeviceExceptionTotal(Object.assign({}, addressParams, { eType: 1, treatment_result: 0 })).then(res => {
+          // 从device_report_new获取违章电器总数
+          getDevicesTotalCount(Object.assign({}, addressParams, { illegal: 3000 })).then(res => {
+            this.totalCount.illegal = res
+          })
+          // 从device_report_new获取报警总数
+          getDevicesTotalCount(Object.assign({}, addressParams, { alarm: 1, lc: 10, t: 80 })).then(res => {
             this.totalCount.alarms = res
-          })
-          // 从home_protrait表获取电器总数
-          getAppTotalCount(addressParams).then(res => {
-            this.totalCount.appliances = res
-          })
-          // 从home_protrait表获取运行电器总数
-          getAppTotalCount(Object.assign({ state: 1 }, addressParams)).then(res => {
-            this.totalCount.runApps = res
-          })
-          // 从home_protrait表获取高危总数
-          getAppTotalCount(Object.assign({ is_high: 1 }, addressParams)).then(res => {
-            this.totalCount.riskApps = res
-          })
-          // 从home_protrait表获取运行高危总数
-          // getAppTotalCount(Object.assign({ is_high: 1, state: 1 }, addressParams)).then(res => {
-          //   this.totalCount.runRiskApps = res
-          // })
-          getHomePortraits(Object.assign({}, addressParams, { is_high: 1, state: 1 })).then(res => {
-            this.totalCount.runRiskApps = res._items.length
           })
         })
       },
@@ -586,31 +569,16 @@ export default {
             this.totalCount.runDevices = res
           })
           // 从device_report_new获取故障总数
-          getDevicesTotalCount(Object.assign({}, addressParams, { eType: 2 })).then(res => {
+          getDevicesTotalCount(Object.assign({}, addressParams, { unWork: 1 })).then(res => {
             this.totalCount.unWork = res
           })
-          // 从exception_report_new获取未处理的报警总数
-          getDeviceExceptionTotal(Object.assign({}, addressParams, { eType: 1, treatment_result: 0 })).then(res => {
+          // 从device_report_new获取报警总数
+          getDevicesTotalCount(Object.assign({}, addressParams, { alarm: 1, lc: 30, t: 80 })).then(res => {
             this.totalCount.alarms = res
           })
-          // 从home_protrait表获取电器总数
-          getAppTotalCount(addressParams).then(res => {
-            this.totalCount.appliances = res
-          })
-          // 从home_protrait表获取运行电器总数
-          getAppTotalCount(Object.assign({ state: 1 }, addressParams)).then(res => {
-            this.totalCount.runApps = res
-          })
-          // 从home_protrait表获取高危总数
-          getAppTotalCount(Object.assign({ is_high: 1 }, addressParams)).then(res => {
-            this.totalCount.riskApps = res
-          })
-          // 从home_protrait表获取运行高危总数
-          // getAppTotalCount(Object.assign({ is_high: 1, state: 1 }, addressParams)).then(res => {
-          //   this.totalCount.runRiskApps = res
-          // })
-          getHomePortraits(Object.assign({}, addressParams, { is_high: 1, state: 1 })).then(res => {
-            this.totalCount.runRiskApps = res._items.length
+          // 从device_report_new获取违章电器总数
+          getDevicesTotalCount(Object.assign({}, addressParams, { illegal: 3000 })).then(res => {
+            this.totalCount.illegal = res
           })
           this.loading.total = false
           // 地图标记物不能自动根据状态反应变化，必须手动添加
@@ -830,13 +798,9 @@ export default {
         if (this.fullScreen === false) this.exitFullScreen()
       },
       /** 点击事件 */
-      // 显示实时报警
-      onClickShowAlarmsManage(type) {
-        this.$refs.alarmsManage.fetchLastAlarmList(type)
-        this.visible.alarmManage = true
-      },
-      onClickShowDeviceUnWork(type) {
-        this.$refs.devicesInfo.setFetchReportType(type)
+      onClickShowDevices(params) {
+        // 1断线 2违章 3报警
+        this.$refs.devicesInfo.setFetchReportType(params)
         this.visible.devicesInfo = true
       },
       showMsgFromPlaceChange(data) {

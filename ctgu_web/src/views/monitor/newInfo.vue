@@ -139,7 +139,7 @@
         </div>
         <div style="width: 500px">
           <div class="back" @click="handleClose" style="cursor: pointer;float: right">返回</div>
-          <div class="back" @click="handleChangeScenes(activeItem.id)" style="cursor: pointer;">场景切换 ({{scenes[currentScene].name}})</div>
+          <!--<div class="back" @click="handleChangeScenes(activeItem.id)" style="cursor: pointer;">场景切换 ({{scenes[currentScene].name}})</div>-->
         </div>
       </div>
       <homeApp :uuid="activeUuid"></homeApp>
@@ -157,7 +157,15 @@
   import { updateChannel } from '../../api/device'
   import { getUnbindUsers } from '../../api/user'
 
-  const defaultSearchForm = { uuid: null, expand: 'user,device', user_id: null, eType: null }
+  const defaultSearchForm = {
+    uuid: null,
+    expand: 'user,device',
+    user_id: null,
+    searchType: null,
+    illegal: 3000, // 预设功率、漏电流、温度阈值
+    lc: 10,
+    t: 80
+  }
 
   export default {
     components: { addressComponent, homeApp },
@@ -243,9 +251,14 @@
         })
       },
       setFetchReportType(params) {
-        if (params === 2) {
-          this.searchForm.eType = params
-        } else this.searchForm.eType = null
+        // 1断线 2违章 3报警
+        if (params === 1) {
+          this.searchForm.searchType = params
+        } else if (params === 2) {
+          this.searchForm.searchType = params
+        } else if (params === 3) {
+          this.searchForm.searchType = params
+        } else this.searchForm.searchType = null
         this.fetchReport()
       },
       /**

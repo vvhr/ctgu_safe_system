@@ -23,6 +23,17 @@ class DeviceReportNewController extends ParentController
             $query->andFilterWhere(['device_report_new.treatment_result'=>$params['treatment_result']]);
         if(isset($params['eType']))
             $query->andFilterWhere(['device_report_new.eType'=>$params['eType']]);
+        if(isset($params['searchType'])) {
+            // 当上报时间 < 当前时间 - 10分钟 时，判断为故障断线
+            if($params['searchType'] == 1)
+                $query->andFilterWhere(['<', 'device_report_new.reportTime' , date("Y-m-d H:i:s" ,strtotime("- 600 seconds"))]);
+            // 当功率大于预定功率，判断为开启了违章电器
+            elseif($params['searchType'] == 2)
+                $query->andFilterWhere(['>', 'device_report_new.p', $params['illegal']]);
+            // 当温度和漏电流大于预定阈值，判断报警
+            elseif($params['searchType'] == 3)
+                $query->andFilterWhere(['OR', ['>', 'lc', (float)$params['lc']], ['>', 't', (float)$params['t']]]);
+        }
         //return $query->createCommand()->getRawSql();
         return ActionTool::createActiveDataProvider($query, $params, 'uuid');
     }
@@ -56,8 +67,15 @@ class DeviceReportNewController extends ParentController
             ->leftJoin('device','device_report_new.uuid = device.uuid');
         ActionTool::addGroup3UserIdFilter($query);
         ActionTool::addAddressFilter($query, $params);
-        if(isset($params['eType']))
-            $query->andFilterWhere(['device_report_new.eType'=>$params['eType']]);
+        // 当上报时间 < 当前时间 - 10分钟 时，判断为故障断线
+        if(isset($params['unWork']))
+            $query->andFilterWhere(['<', 'device_report_new.reportTime' , date("Y-m-d H:i:s" ,strtotime("- 600 seconds"))]);
+        // 当功率大于预定功率，判断为开启了违章电器
+        if(isset($params['illegal']))
+            $query->andFilterWhere(['>', 'device_report_new.p', $params['illegal']]);
+        // 当温度和漏电流大于预定阈值，判断报警
+        if(isset($params['alarm']))
+            $query->andFilterWhere(['OR', ['>', 'lc', (float)$params['lc']], ['>', 't', (float)$params['t']]]);
         return (int)($query->count());
     }
 }

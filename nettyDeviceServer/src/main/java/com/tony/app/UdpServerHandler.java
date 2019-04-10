@@ -89,7 +89,6 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
         // // DebugUtil.println("-->开始解析原生数据：");
         ArrayList<MessageBase> messageBases = new ArrayList<>();
 
-        // 肖工的处理程序
         try{
             // 如果以ffff00开头，则处理
             if(udpHexString.indexOf("ffff") == 0){
@@ -110,7 +109,7 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
                         // DebugUtil.println("Integer.valueOf(hexLength,16):" + Integer.valueOf(hexLength,16));
                         if((udpHexStringPiece.length()/2)==Integer.valueOf(hexLength,16)){
                             MessageBase msgBase = MessageBase.read(udpHexStringPiece);
-                            if(msgBase != null && msgBase.isPass()){
+                            if(msgBase != null){  //&& msgBase.isPass()
                                 messageBases.add(msgBase);
                                 // // DebugUtil.println("-->单条报文校验通过:" +  udpHexStringPiece);
                             }
@@ -160,14 +159,15 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
                     mapper.insertException(model);
                 }
                 // 实时上报存表
+                model.setP(model.getV()/100 * model.getC()/100);
                 mapper.insertOrUpdate(model);
                 session.commit();
-
                 // 存mongoDB
                 /*Document doc = DeviceReportNew.convertModelToDoc(model);
                 MongoCollection<Document> collection = MongoDBUtil.mongoDatabase.getCollection("DeviceReportNewCollection");
                 collection.insertOne(doc);*/
             }
+            DebugUtil.println("--> :" + model);
         }
     }
 }

@@ -9,12 +9,6 @@
         <el-form-item label="房间号">
           <el-input v-model="searchForm.address" placeholder="请输入房间地址"></el-input>
         </el-form-item>
-        <el-form-item label="启用状态">
-          <el-select v-model="searchForm.enable" placeholder="请选择">
-            <el-option :key="1" label="启用" value="1"></el-option>
-            <el-option :key="0" label="禁用" value="0"></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="运行状态">
           <el-select v-model="searchForm.state" placeholder="请选择">
             <el-option
@@ -108,35 +102,15 @@
             </span>
           </div>
           <div><i class="el-icon-info" title="设备uuid"> {{scope.row.uuid}}</i></div>
-          <!--项目信息-->
           <div>
             [房间号] {{ scope.row.address }}
-            <!--<span v-if="scope.row.project"><i class="el-icon-news"> {{ scope.row.project.project_name}}</i></span>-->
-            <!--<span style="color: red" v-else><i class="el-icon-news" style="color: red"> 未绑定项目</i></span>-->
           </div>
         </template>
       </el-table-column>
       <el-table-column label="地址" min-width="220">
         <template slot-scope="scope">
-          <i class="el-icon-location-outline" v-if="scope.row.lat">
-            {{ scope.row.city }}
-            {{ scope.row.district }}
-            {{ scope.row.township }}
-            {{ scope.row.street }}
-            {{ scope.row.address }}
-          </i>
+          <i class="el-icon-location-outline" v-if="scope.row.lat">{{ scope.row.city }} {{ scope.row.district }} {{ scope.row.township }} {{ scope.row.street }} {{ scope.row.address }}</i>
           <i class="el-icon-location-outline" v-else> 地址未设置</i>
-        </template>
-      </el-table-column>
-      <el-table-column label="启用状态" min-width="100" align="center">
-        <template slot-scope="scope">
-          <el-switch
-            :title="scope.row.enable===1?'已启用':'未启用'"
-            @change="onClickEnableDeviceBtn(scope.row)"
-            :value="scope.row.enable === 1"
-            active-color="#13ce66"
-            inactive-color="#ff4949">
-          </el-switch>
         </template>
       </el-table-column>
       <el-table-column label="设备状态" min-width="100" align="center">
@@ -248,7 +222,7 @@
 </template>
 
 <script>
-  import { getDevices, getDevice, updateDevice, enableDevice, bulkAddDevice, bulkBindUser, bulkBindProject } from '../../api/device'
+  import { getDevices, getDevice, updateDevice, bulkAddDevice, bulkBindUser, bulkBindProject } from '../../api/device'
   import { replyRes } from '../../utils/res'
   import { createMap, addMarker, selectedAddressToParams } from '../../utils/AMap'
   import { getUsers } from '../../api/user'
@@ -262,8 +236,6 @@
     uuid: null,
     // 设备状态
     state: null,
-    // 启用状态
-    enable: null,
     // 排序信息
     order_by: 'id',
     order_method: 3
@@ -498,15 +470,6 @@
         getDevices(this.combinedSearchForm).then(res => {
           this.list = res._items
           this.pageInfo.totalCount = res._meta.totalCount
-        })
-      },
-      onClickEnableDeviceBtn(device) {
-        let enable = 0
-        device.enable === 1 ? enable = 0 : enable = 1
-        enableDevice({ id: device.id, enable: enable }).then(res => {
-          if (replyRes(res)) {
-            device.enable = res.bData.enable
-          }
         })
       },
       onClickResetBtn() {

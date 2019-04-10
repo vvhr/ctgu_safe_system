@@ -184,31 +184,4 @@ class DeviceController extends ParentController
         return $query->asArray()->groupBy($districtLevel)->all();
     }
 
-    /**
-     * 启用或禁用设备，如果禁用，java端将不再存储分析该设备数据
-     * @throws \yii\base\InvalidConfigException
-     */
-    public function actionEnableDevice(){
-        /** @var  $redis yii\redis\Connection*/
-        $redis = Yii::$app->redis;
-        $params = \Yii::$app->request->getBodyParams();
-        $id = $params['id'];
-        $enable = $params['enable'];
-        $device = Device::findOne($id);
-        if($device){
-            // 设置redis的开启值
-            $redis->set($device->uuid.'_enable',(int)$enable);
-            // 设置mysql的开启值
-            $device->enable = (int)$redis->get($device->uuid.'_enable');
-            if($device->save()){
-                return ReturnTool::returnPostMsg(Status::SUCCESS,$device, '更新设备启用状态成功');
-            }else{
-                return ReturnTool::returnPostMsg(Status::FAIL,$device->errors, '更新设备启用状态失败');
-            }
-
-        }else{
-            return ReturnTool::returnPostMsg(Status::FAIL,null, '设备ID不存在');
-        }
-
-    }
 }
