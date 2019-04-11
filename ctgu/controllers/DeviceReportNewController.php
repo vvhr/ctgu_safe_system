@@ -32,7 +32,7 @@ class DeviceReportNewController extends ParentController
                 $query->andFilterWhere(['>', 'device_report_new.p', $params['illegal']]);
             // 当温度和漏电流大于预定阈值，判断报警
             elseif($params['searchType'] == 3)
-                $query->andFilterWhere(['OR', ['>', 'lc', (float)$params['lc']], ['>', 't', (float)$params['t']]]);
+                $query->andFilterWhere(['OR', ['>', 'lc', (float)$params['lc']], ['>', 't', (float)$params['t']*10]]);
         }
         //return $query->createCommand()->getRawSql();
         return ActionTool::createActiveDataProvider($query, $params, 'uuid');
@@ -75,7 +75,7 @@ class DeviceReportNewController extends ParentController
             $query->andFilterWhere(['>', 'device_report_new.p', $params['illegal']]);
         // 当温度和漏电流大于预定阈值，判断报警
         if(isset($params['alarm']))
-            $query->andFilterWhere(['OR', ['>', 'lc', (float)$params['lc']], ['>', 't', (float)$params['t']]]);
+            $query->andFilterWhere(['OR', ['>', 'lc', (float)$params['lc']], ['>', 't', (float)$params['t']*10]]);
         return (int)($query->count());
     }
 }

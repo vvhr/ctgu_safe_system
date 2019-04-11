@@ -91,24 +91,6 @@ export const asyncRouterMap = [
         name: 'monitorInfo',
         component: () => import('../views/monitor/newInfo'),
         meta: { title: '实时状态', icon: 'process', roles: ['admin', 'personal', 'district'] }
-      },
-      {
-        path: 'appliance',
-        name: 'monitorAppliance',
-        component: () => import('../views/monitor/appliance'),
-        meta: { title: '运行电器', icon: 'process', roles: ['admin', 'personal', 'district'] }
-      },
-      // {
-      //   path: 'home_app',
-      //   name: 'monitorHomeApp',
-      //   component: () => import('../views/monitor/components/homeApp'),
-      //   meta: { title: '电器运行展示', icon: 'process' }
-      // },
-      {
-        path: 'risk_app',
-        name: 'monitorRiskApp',
-        component: () => import('../views/monitor/riskApp'),
-        meta: { title: '高危电器', icon: 'process', roles: ['admin', 'personal', 'district'] }
       }
     ]
   },
@@ -139,58 +121,6 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/maintain',
-    component: Layout,
-    name: 'Maintain',
-    meta: { title: '处理维护', icon: 'check', roles: ['admin', 'personal', 'district'] },
-    children: [
-      {
-        path: 'alarm',
-        name: 'MaintainAlarm',
-        component: () => import('../views/maintain/alarm'),
-        meta: { title: '异常维护', icon: 'process', roles: ['admin', 'personal', 'district'] }
-      },
-      {
-        path: 'downLoad',
-        name: 'DownLoad',
-        component: () => import('../views/maintain/downLoad'),
-        meta: { title: '数据下载', icon: 'process', roles: ['admin'] }
-      }
-    ]
-  },
-  {
-    path: '/history',
-    component: Layout,
-    name: 'history',
-    meta: { title: '历史记录', icon: 'check', roles: ['admin', 'personal', 'district'] },
-    children: [
-      {
-        path: 'alarm',
-        name: 'historyAlarm',
-        component: () => import('../views/history/alarm'),
-        meta: { title: '报警记录', icon: 'process', roles: ['admin', 'personal', 'district'] }
-      },
-      {
-        path: 'sms-log',
-        name: 'historySmsLog',
-        component: () => import('../views/history/sms-log'),
-        meta: { title: '短信历史', icon: 'process', roles: ['admin'] }
-      }
-      // {
-      //   path: 'leakage-event',
-      //   name: 'historyLeakageEvent',
-      //   component: () => import('../views/history/leakage_event'),
-      //   meta: { title: '报警分析', icon: 'process', roles: ['admin'] }
-      // }
-      // {
-      //   path: 'leakage-max',
-      //   name: 'historyLeakageMax',
-      //   component: () => import('../views/history/leakage_max'),
-      //   meta: { title: '极值统计', icon: 'process', roles: ['admin', 'personal'] }
-      // }
-    ]
-  },
-  {
     path: '/setting',
     component: Layout,
     name: 'setting',
@@ -207,40 +137,8 @@ export const asyncRouterMap = [
         name: 'settingGroup',
         component: () => import('../views/setting/userGroup'),
         meta: { title: '用户组管理', icon: 'process', roles: ['admin'] }
-      },
-      {
-        path: 'deviceParams',
-        name: 'settingDeviceParams',
-        component: () => import('../views/setting/deviceParams'),
-        meta: { title: '设备参数', icon: 'process', roles: ['admin'] }
       }
-      // {
-      //   path: 'menu',
-      //   name: 'settingMenu',
-      //   component: () => import('../views/setting/menu'),
-      //   meta: { title: '菜单管理', icon: 'process', roles: ['admin'] }
-      // }
     ]
   },
-  // {
-  //   path: '/test',
-  //   component: Layout,
-  //   name: 'test',
-  //   meta: { title: '测试专用', icon: 'check', roles: ['admin'] },
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'testIndex',
-  //       component: () => import('../views/test/index'),
-  //       meta: { title: '测试页1', icon: 'process', roles: ['admin'] }
-  //     },
-  //     {
-  //       path: 'index1',
-  //       name: 'testIndex1',
-  //       component: () => import('../views/test/index'),
-  //       meta: { title: '测试2', icon: 'process', roles: ['admin'] }
-  //     }
-  //   ]
-  // },
   { path: '*', redirect: '/404', hidden: true }
 ]

@@ -316,20 +316,9 @@
   import { getDevicesTotalCount } from '../../api/deviceReportNew'
   import { getDeviceExceptionTotal, getTotalGroupByDistrict, getTotalGroupByMonthOfYear } from '../../api/exceptionReportNew'
   import { parseTime } from '../../utils'
-  // import { getSmsList } from '../../api/smsLog'
   import devicesInfo from '../monitor/newInfo'
   import myMarquee from './components/myMarquee'
-  import alarms from '../history/alarm'
   import alarmsManage from '../monitor/alarm'
-  // import myAddress from '../setting/address'
-  // import deviceManage from '../pdManage/device'
-  // import appliance from '../monitor/appliance'
-  // import riskApp from '../monitor/riskApp'
-  // import sendMassage from '../history/sms-log'
-  // import leakage_event from '../history/leakage_event'
-  // import user from '../pdManage/user'
-  // import project from '../pdManage/project'
-  // import alarmHandel from '../maintain/alarm'
   import { getDeviceReportOne } from '../../api/deviceReportNew'
 
 export default {
@@ -338,10 +327,6 @@ export default {
       myMarquee,
       devicesInfo,
       deviceManage: resolve => { require(['../pdManage/device'], resolve) },
-      appliance: resolve => { require(['../monitor/appliance'], resolve) },
-      riskApp: resolve => { require(['../monitor/riskApp'], resolve) },
-      alarms,
-      alarmHandel: resolve => { require(['../maintain/alarm'], resolve) },
       alarmsManage,
       sendMassage: resolve => { require(['../history/sms-log'], resolve) },
       event_record: resolve => { require(['../history/event_record'], resolve) },

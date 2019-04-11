@@ -11,7 +11,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.internal.SocketUtils;
-
 import java.net.InetSocketAddress;
 
 public final class UdpClient {
@@ -21,7 +20,7 @@ public final class UdpClient {
     private static final InetSocketAddress ADDRESS = SocketUtils.socketAddress("localhost", PORT);
     // 模拟客户端
     public static void main(String[] args) throws Exception {
-        for(int i=1;i<50;i++){
+        for(int i=1;i<100;i++){
             int index = (int)System.currentTimeMillis()%6;
             System.out.println(index);
             String messageContent = MockMessage.newProtoMessageArray[index];
