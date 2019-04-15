@@ -58,33 +58,6 @@
     </div>
     <!--第二行：电器开关展示 新-->
     <div class="app-container-row-02-new">
-      <!--<div class="app-container-row-left scroll-bar">-->
-        <!--<table>-->
-          <!--<thead style="color: #0dfdf3">-->
-          <!--<tr style="background-color: rgb(64, 92, 133)">-->
-            <!--<td style="text-align: center; width: 150px">电器名称</td>-->
-            <!--<td style="text-align: center; width: 100px">指纹功率</td>-->
-            <!--<td style="text-align: center; width: 180px">更新时间</td>-->
-            <!--&lt;!&ndash;<td style="text-align: center; width: 100px">开启次数</td>&ndash;&gt;-->
-            <!--&lt;!&ndash;<td style="text-align: center; width: 100px">开启台数</td>&ndash;&gt;-->
-          <!--</tr>-->
-          <!--</thead>-->
-          <!--<tbody>-->
-          <!--<tr v-for="appId in myOpenAppIds">-->
-            <!--<td style="text-align: center">-->
-              <!--<el-tag size="mini" type="success">{{myApps[appId].appName}}</el-tag>-->
-            <!--</td>-->
-            <!--<td style="text-align: center">{{myApps[appId].apAve}}</td>-->
-            <!--<td style="text-align: center">{{myApps[appId].updateTime}}</td>-->
-            <!--&lt;!&ndash;<td style="text-align: center">{{myApps[appId].openCount}}</td>&ndash;&gt;-->
-            <!--&lt;!&ndash;<td style="text-align: center">{{myApps[appId].appNum}}</td>&ndash;&gt;-->
-          <!--</tr>-->
-          <!--</tbody>-->
-        <!--</table>-->
-        <!--<div v-if="myOpenAppIds.length < 1" style="width:100%;font-size: 40px;text-align: center;color: #97a8be;line-height: 200px">-->
-          <!--暂无运行电器-->
-        <!--</div>-->
-      <!--</div>-->
       <div class="app-container-row-center">
         <el-row>
           <div class="app-container-row-center-top scroll-bar">
@@ -216,8 +189,6 @@
         myOpenAppIds: [],
         myOpenAppIdsOld: [],
         myApps: {},
-        // myJustOpenedApps: [],
-        // myJustClosedApps: [],
         myAppEventsHistory: [],
         myOpenAppOld: [],
         refreshTime: new Date(),
@@ -225,20 +196,6 @@
         enableVoicePlay: true,
         deviceReport: [],
         canDo: true,
-        voices: [
-          { voice: null, name: '开启', time: 1000 },
-          { voice: null, name: '关闭', time: 1000 },
-          { voice: null, name: '电吹风', time: 1500 },
-          { voice: null, name: 'CFL灯', time: 2000 },
-          { voice: null, name: 'LED灯', time: 2000 },
-          { voice: null, name: '电磁炉', time: 1500 },
-          { voice: null, name: '电动车', time: 1500 },
-          { voice: null, name: '热得快', time: 1500 },
-          { voice: null, name: '热水壶', time: 1500 },
-          { voice: null, name: '热水器', time: 1500 },
-          { voice: null, name: '微波炉', time: 1500 },
-          { voice: null, name: '浴霸', time: 1000 }
-        ],
         homeInfo: null,
         timer: null,
         eventTypes: {
@@ -330,49 +287,9 @@
           this.reportData.current_arr.push(this.deviceReport.c / 10)
           this.reportData.voltage_arr.push(this.deviceReport.v / 100)
         }
-      },
-      /** 声音播放函数 **/
-      // 播放指定设置的声音
-      playSpecificVoice(appName, openOrClose) {
-        if (this.enableVoicePlay) {
-          for (const index in this.voices) {
-            if (this.voices[index].name === appName) {
-              // console.log('播放声音', appName)
-              this.voices[index].voice.play()
-              this.enableVoicePlayLater()
-              openOrClose ? setTimeout(this.playOpenVoice, this.voices[index].time) : setTimeout(this.playCloseVoice, this.voices[index].time)
-              break
-            }
-          }
-        }
-      },
-      playOpenVoice() {
-        this.voices[0].voice.play()
-      },
-      playCloseVoice() {
-        this.voices[1].voice.play()
-      },
-      enableVoicePlayLater() {
-        this.enableVoicePlay = false
-        const appThis = this
-        setTimeout(function() {
-          appThis.enableVoicePlay = true
-        }, 3000)
       }
     },
     mounted() {
-      this.voices[0].voice = document.getElementById('voice-open')
-      this.voices[1].voice = document.getElementById('voice-close')
-      this.voices[2].voice = document.getElementById('voice-dcf')
-      this.voices[3].voice = document.getElementById('voice-cfl')
-      this.voices[4].voice = document.getElementById('voice-led')
-      this.voices[5].voice = document.getElementById('voice-dcl')
-      this.voices[6].voice = document.getElementById('voice-ddc')
-      this.voices[7].voice = document.getElementById('voice-rdk')
-      this.voices[8].voice = document.getElementById('voice-rsh')
-      this.voices[9].voice = document.getElementById('voice-rsq')
-      this.voices[10].voice = document.getElementById('voice-wbl')
-      this.voices[11].voice = document.getElementById('voice-yb')
       this.init()
     },
     watch: {
@@ -384,11 +301,9 @@
           this.ifCanSetTimeOut = true
           this.init()
         }
-        // console.log('XXXXXXXXXXXX--watch:homeApp:uuid:', value, 'this.----ifCanSetTimeOut:', this.ifCanSetTimeOut)
       }
     },
     beforeDestroy() {
-      // console.log('停止获取电器开关事件')
       this.ifCanSetTimeOut = false
       clearTimeout(this.timer)
     }

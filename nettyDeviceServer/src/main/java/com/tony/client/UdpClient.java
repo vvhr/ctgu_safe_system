@@ -20,12 +20,12 @@ public final class UdpClient {
     private static final InetSocketAddress ADDRESS = SocketUtils.socketAddress("localhost", PORT);
     // 模拟客户端
     public static void main(String[] args) throws Exception {
-        for(int i=1;i<100;i++){
-            int index = (int)System.currentTimeMillis()%6;
+        for(int i=1;i<200;i++){
+            int index = (int)System.currentTimeMillis()%12;
             System.out.println(index);
             String messageContent = MockMessage.newProtoMessageArray[index];
             client(i, messageContent);
-            Thread.sleep(1000);
+            Thread.sleep(800);
         }
     }
     // 客户端发送UDP包

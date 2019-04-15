@@ -93,9 +93,9 @@
       </el-table-column>
       <el-table-column label="状态" min-width="60" align="center">
         <template slot-scope="scope">
-          <span style="color: #409EFF" v-if="new Date(scope.row.reportTime).valueOf() + heartbeat_Time < new Date().valueOf()">  已断线 </span>
+          <span style="color: orange" v-if="new Date(scope.row.reportTime).valueOf() + heartbeat_Time < new Date().valueOf()">  已断线 </span>
           <span style="color: red" v-else-if="scope.row.lc > searchForm.lc || scope.row.t > searchForm.t*10">报警</span>
-          <span style="color: orange" v-else>正常</span>
+          <span style="color: green" v-else>正常</span>
         </template>
       </el-table-column>
       <el-table-column prop="reportTime" label="上报时间" min-width="90" align="center"></el-table-column>
@@ -105,7 +105,7 @@
       :modal-append-to-body="true" :modal="true" :lock-scroll="true" :append-to-body="true"
       center
       fullscreen
-      title="用户电器实时运行监控"
+      title="用户实时运行监控"
       :visible.sync="homeAppDialogVisible"
       :before-close="handleClose"
       custom-class="deep-background-02">
@@ -135,7 +135,6 @@
         </div>
         <div style="width: 500px">
           <div class="back" @click="handleClose" style="cursor: pointer;float: right">返回</div>
-          <!--<div class="back" @click="handleChangeScenes(activeItem.id)" style="cursor: pointer;">场景切换 ({{scenes[currentScene].name}})</div>-->
         </div>
       </div>
       <homeApp :uuid="activeUuid"></homeApp>

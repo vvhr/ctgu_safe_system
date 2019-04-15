@@ -607,7 +607,7 @@ export default {
               if (new Date(item.report.reportTime).valueOf() + this.heartbeat_Time < new Date().valueOf()) {
                 state = 2
                 zIndex = 101
-              } else if (item.report.lc > 10 || item.report.t > 65 * 10) {
+              } else if (item.report.lc > 10 || item.report.t > 650) {
                 state = 1
                 zIndex = 102
               } else state = 0
