@@ -70,9 +70,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $fields = [
             'groupInfo'=>function($model){
                 return $model->groupInfo;
-            },
-            'wxUsers'=>function($model){
-                return $model->wxUsers;
             }
         ];
         return $fields;
@@ -80,10 +77,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function getGroupInfo(){
         return $this->hasOne(UserGroup::class, ['id'=>'user_group_id']);
-    }
-
-    public function getWxUsers(){
-        return $this->hasMany(WxUser::class, ['user_id'=>'id']);
     }
 
     /**-----------------------实现认证IdentityInterface接口----------------------------------------------*/

@@ -14,14 +14,6 @@ export function getDeviceReport(params = {}) {
     params: params
   })
 }
-// actionCloseOverPowerAppliance
-export function closeOverPowerAppliance(params = {}) {
-  return request({
-    url: '/device-report-new/cpa',
-    method: 'get',
-    params: params
-  })
-}
 
 export function getDevicesTotalCount(params) {
   return request({

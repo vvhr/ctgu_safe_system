@@ -41,9 +41,6 @@ class UserDevice extends \yii\db\ActiveRecord
             'device'=>function($model){
                 return $model->device;
             },
-            'home_user'=>function($model){
-                return $model->homeUser;
-            },
             'user'=>function($model){
                 return $model->user;
             }
@@ -54,16 +51,8 @@ class UserDevice extends \yii\db\ActiveRecord
     public function getDevice(){
         return $this->hasOne(Device::class,['id'=>'device_id']);
     }
-
     public function getUser(){
         return $this->hasOne(User::class,['id'=>'user_id']);
     }
 
-    /**
-     * 获取对应的通道用户信息
-     * @return \yii\db\ActiveQuery
-     */
-    public function getHomeUser(){
-        return $this->hasOne(HomeUser::class,['id'=>'home_id']);
-    }
 }

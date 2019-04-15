@@ -6,7 +6,6 @@ export function getDeviceExceptions(params) {
     params: params
   })
 }
-
 export function getDeviceExceptionTotal(params) {
   return request({
     url: '/exception-report-new/total',
@@ -26,14 +25,6 @@ export function getTotalGroupByMonthOfYear(params) {
     url: '/exception-report-new/total-group-by-month-of-year',
     method: 'get',
     params: params
-  })
-}
-
-export function clearAlarm(data) {
-  return request({
-    url: '/exception-report-new/clear-alarm',
-    method: 'post',
-    data: data
   })
 }
 

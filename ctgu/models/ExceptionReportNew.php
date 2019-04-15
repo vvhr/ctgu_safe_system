@@ -74,12 +74,6 @@ class ExceptionReportNew extends \yii\db\ActiveRecord
             },
             'user'=> function($model){
                 return $model->user;
-            },
-            'maintainRecord'=> function($model){
-                return $model->maintainRecord;
-            },
-            'wxUsers'=> function($model){
-                return $model->wxUsers;
             }
         ];
         return $fields;
@@ -91,14 +85,6 @@ class ExceptionReportNew extends \yii\db\ActiveRecord
 
     public function getUser(){
         return $this->hasOne(User::class, ['id'=>'user_id'])->via('device');
-    }
-
-    public function getMaintainRecord(){
-        return $this->hasMany(MaintainRecord::class, ['device_exception_id'=>'id']);
-    }
-
-    public function getWxUsers(){
-        return $this->hasMany(WxUser::class, ['user_id'=>'user_id'])->via('device');
     }
 
     /**

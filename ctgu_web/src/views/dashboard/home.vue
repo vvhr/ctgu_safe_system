@@ -127,18 +127,17 @@
                     <td>
                       UUID ：{{activeDevice.uuid}}<br>
                       安装地址：{{activeDevice.district + activeDevice.township + activeDevice.address}}<br>
-                      设备状态：{{states[activeDevice.state]}}<br>
                     </td>
                   </tr>
                   <!--设备实时运行参数-->
-                  <tbody v-if="activeDevice.report !== undefined">
+                  <tbody v-if="activeDevice.report_ !== undefined">
                   <tr style="height: 50px">
                     <th>运行参数</th>
                     <td>
-                      电压值：{{activeDevice.report.v/100}} (V)
-                      <a style="left: 160px;position: absolute">电流值：{{activeDevice.report.c/1000}} (A)</a><br>
-                      漏电流：{{activeDevice.report.lc}} (mA)
-                      <a style="left: 160px;position: absolute">温度值：{{activeDevice.report.t/10}} (C)</a><br>
+                      电压值：{{activeDevice.report_.v/100}} (V)
+                      <a style="left: 160px;position: absolute">电流值：{{activeDevice.report_.c/1000}} (A)</a><br>
+                      漏电流：{{activeDevice.report_.lc}} (mA)
+                      <a style="left: 160px;position: absolute">温度值：{{activeDevice.report_.t/10}} (C)</a><br>
                     </td>
                   </tr>
                   </tbody>
@@ -212,62 +211,6 @@
             </div>
           </el-dialog>
         </div>
-        <!--对话框 运行电器-->
-        <div class="showDevices showDevicesManage">
-          <el-dialog title="运行电器" :visible.sync="visible.runApps" :lock-scroll="true">
-            <div class="devicesInfo-content">
-              <appliance></appliance>
-            </div>
-          </el-dialog>
-        </div>
-        <!--对话框 高位电器-->
-        <div class="showDevices showDevicesManage">
-          <el-dialog title="运行中的高危电器" :visible.sync="visible.riskApp" :lock-scroll="true">
-            <div class="devicesInfo-content">
-              <riskApp></riskApp>
-            </div>
-          </el-dialog>
-        </div>
-        <!--对话框 报警记录-->
-        <div class="showDevices showDevicesManage" v-show="vShow.alarms">
-          <el-dialog title="历史报警记录" :visible.sync="visible.alarms" :lock-scroll="true">
-            <div class="devicesInfo-content">
-              <alarms ref="alarms"></alarms>
-            </div>
-          </el-dialog>
-        </div>
-        <!--对话框 短信记录-->
-        <div class="showDevices showDevicesManage">
-          <el-dialog title="短信发送记录" :visible.sync="visible.sendMassage" :lock-scroll="true">
-            <div class="devicesInfo-content">
-              <sendMassage></sendMassage>
-            </div>
-          </el-dialog>
-        </div>
-        <!--对话框 实时异常-->
-        <div class="showDevices showDevicesManage" v-show="vShow.alarmManage">
-          <el-dialog title="实时异常" :visible.sync="visible.alarmManage" :lock-scroll="true">
-            <div class="devicesInfo-content">
-              <alarmsManage ref="alarmsManage"></alarmsManage>
-            </div>
-          </el-dialog>
-        </div>
-        <!--对话框 漏电分析-->
-        <div class="showDevices showDevicesManage">
-          <el-dialog title="漏电分析" :visible.sync="visible.event_record" :lock-scroll="true">
-            <div class="devicesInfo-content">
-              <event_record></event_record>
-            </div>
-          </el-dialog>
-        </div>
-        <!--对话框 异常维护-->
-        <div class="showDevices showDevicesManage">
-          <el-dialog title="设备异常维护" :visible.sync="visible.alarmHandel" :lock-scroll="true">
-            <div class="devicesInfo-content">
-              <alarmHandel></alarmHandel>
-            </div>
-          </el-dialog>
-        </div>
         <!--对话框 用户管理-->
         <div class="showDevices showDevicesManage">
           <el-dialog title="用户管理" :visible.sync="visible.user" :lock-scroll="true">
@@ -318,7 +261,6 @@
   import { parseTime } from '../../utils'
   import devicesInfo from '../monitor/newInfo'
   import myMarquee from './components/myMarquee'
-  import alarmsManage from '../monitor/alarm'
   import { getDeviceReportOne } from '../../api/deviceReportNew'
 
 export default {
@@ -327,9 +269,6 @@ export default {
       myMarquee,
       devicesInfo,
       deviceManage: resolve => { require(['../pdManage/device'], resolve) },
-      alarmsManage,
-      sendMassage: resolve => { require(['../history/sms-log'], resolve) },
-      event_record: resolve => { require(['../history/event_record'], resolve) },
       user: resolve => { require(['../pdManage/user'], resolve) },
       project: resolve => { require(['../pdManage/project'], resolve) }
     },
@@ -337,6 +276,7 @@ export default {
       return {
         AMap: null,
         map: null,
+        heartbeat_Time: 600000, // 监测设备断线的延时
         totalCount: {
           device: 0,
           runDevices: 0,
@@ -365,7 +305,7 @@ export default {
           total: true
         },
         exceptionTotalGroupByMonthOfYear: [],
-        searchForm: { enable: 1, pageSize: 10000 },
+        searchForm: { enable: 1, pageSize: 10000, expand: 'report' },
         mapOption: {
           buildingAnimation: true, // 楼块出现是否带动画
           zoom: 17,
@@ -387,18 +327,11 @@ export default {
           devicesInfo: true,
           mapDeviceInfo: false,
           devicesManage: false,
-          alarms: true,
-          sendMassage: false,
-          event_record: false,
-          alarmManage: true,
-          alarmHandel: false,
           user: false,
           project: false,
           setting: false
         },
         vShow: {
-          alarms: false,
-          alarmManage: false,
           devicesInfo: false
         },
         mapStyles: [
@@ -446,6 +379,7 @@ export default {
     },
     methods: {
       init() {
+        // 服务型加载动画
         this.loadingInstance = Loading.service({ fullscreen: true, background: 'rgba(37, 37, 37, 0.8)', text: '正在加载系统....(若等待时间超过10秒请按F5刷新!)' })
         // 获取当前需要按其分组的区域级别
         let districtLevelForGroupBy = ''
@@ -463,10 +397,6 @@ export default {
             districtLevelForGroupBy = 'street'
             break
         }
-        // 获取按月统计并创建图表
-        this.fetchTotalGroupByMonthOfYear().then(res => {
-          this.createChart01()
-        })
         // 获取设备异常总数
         this.fetchDeviceExceptionTotal()
         // 将设备列表转为Map映射:
@@ -489,11 +419,9 @@ export default {
       // 点击标记物弹出信息窗体
       onClickMarker(device) {
         this.activeDevice = Object.assign({}, device)
-        console.log('标记物被点击')
         getDeviceReportOne({ uuid: device.uuid }).then(res => {
           if (res) {
-            this.$set(this.activeDevice, 'report', res)
-            // console.log('this.activeDevice.info', res)
+            this.$set(this.activeDevice, 'report_', res)
           }
         })
         const content = document.getElementById('map-device-info')
@@ -571,13 +499,9 @@ export default {
           if (this.list.length <= 0) {
             this.$message({ message: '该区域没有查询到设备', type: 'success' })
           }
-          this.visible.alarms = false
-          this.visible.alarmManage = false
           this.visible.devicesInfo = false
           this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
             this.loadingInstance.close()
-            this.vShow.alarms = true
-            this.vShow.alarmManage = true
             this.vShow.devicesInfo = true
           })
         })
@@ -673,13 +597,22 @@ export default {
               hadSetCenter = true
             }
             const tempPosition = [item.lon, item.lat]
+            // 根据设备状态跳转图标的zIndex层次
             let zIndex = 100
-            if (item.state === 2) {
+            let state = 0
+            if (item.report === null) {
+              state = 2
               zIndex = 101
-            } else if (item.state === 1) {
-              zIndex = 100
+            } else {
+              if (new Date(item.report.reportTime).valueOf() + this.heartbeat_Time < new Date().valueOf()) {
+                state = 2
+                zIndex = 101
+              } else if (item.report.lc > 10 || item.report.t > 65 * 10) {
+                state = 1
+                zIndex = 102
+              } else state = 0
             }
-            this.addMarker(item, '_marker_' + this.markStyles[this.settingForm.defaultMarkStyleId].value + '_' + item.state, tempPosition, zIndex)
+            this.addMarker(item, '_marker_' + this.markStyles[this.settingForm.defaultMarkStyleId].value + '_' + state, tempPosition, zIndex)
             count++
           } else {
             console.log(item, '-----------该设备缺坐标')

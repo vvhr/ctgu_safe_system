@@ -29,11 +29,4 @@ export function getTotalGroupByMonthOfYear(params) {
   })
 }
 
-export function clearAlarm(data) {
-  return request({
-    url: '/device-exception-new/clear-alarm',
-    method: 'post',
-    data: data
-  })
-}
 

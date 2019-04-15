@@ -68,11 +68,11 @@ class Device extends \yii\db\ActiveRecord
             'user'=>function($model){
                 return $model->user;
             },
-            'homePortrait'=>function($model){
-                return $model->homePortrait;
-            },
             'project'=>function($model){
                 return $model->project;
+            },
+            'report'=>function($model){
+                return $model->report;
             }
         ];
         return $extraFields;
@@ -82,17 +82,11 @@ class Device extends \yii\db\ActiveRecord
     public function getUser(){
         return $this->hasOne(User::class, ['id'=>'user_id']);
     }
-
-    public function getHomePortrait(){
-        return $this->hasMany(HomePortrait::class, ['uuid'=>'uuid']);
+    public function getReport(){
+        return $this->hasOne(DeviceReportNew::class, ['uuid'=>'uuid']);
     }
-
     public function getProject(){
         return $this->hasOne(Project::class, ['id'=>'project_id']);
-    }
-
-    public function getWxUsers(){
-        return $this->hasMany(WxUser::class, ['user_id'=>'user_id']);
     }
 
     public static function bulkAddDevice(){

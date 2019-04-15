@@ -58,13 +58,6 @@ export const asyncRouterMap = [
         name: 'homeIndex',
         component: () => import('../views/dashboard/home'),
         meta: { title: '首页', icon: 'user', roles: ['admin', 'personal', 'district'] }
-      },
-      {
-        path: 'bigScreen',
-        name: 'homeBigScreen',
-        hidden: true,
-        component: () => import('../views/dashboard/bigScreen'),
-        meta: { title: '大屏展示', icon: 'user', roles: ['admin', 'personal', 'district'] }
       }
     ]
   },
@@ -74,18 +67,6 @@ export const asyncRouterMap = [
     name: 'monitor',
     meta: { title: '实时监控', icon: 'check', roles: ['admin', 'personal', 'district'] },
     children: [
-      {
-        path: 'map',
-        name: 'monitorMap',
-        component: () => import('../views/monitor/map'),
-        meta: { title: '地图监控', icon: 'process', roles: ['admin', 'personal', 'district'] }
-      },
-      {
-        path: 'alarm',
-        name: 'monitorAlarm',
-        component: () => import('../views/monitor/alarm'),
-        meta: { title: '实时异常', icon: 'process', roles: ['admin', 'personal', 'district'] }
-      },
       {
         path: 'info',
         name: 'monitorInfo',

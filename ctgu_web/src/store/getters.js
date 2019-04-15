@@ -1,6 +1,6 @@
 // 全局状态获取器
 const getters = {
-  sidebar: state => state.app.sidebar,
+  // sidebar: state => state.app.sidebar,
   device: state => state.app.device,
   alarm_type: state => state.app.alarm_type,
   alarm_cause: state => state.app.alarm_cause,

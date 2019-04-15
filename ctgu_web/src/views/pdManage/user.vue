@@ -88,7 +88,6 @@
 <script>
   import { getUser, getUsers, createUser, updateUser } from '../../api/user'
   import { replyRes } from '../../utils/res'
-  import { enableOrNotReceiveMsg } from '../../api/wxUser'
   import userDevice from './projectDevice/userDevice'
 
   const defaultRuleForm = {
@@ -183,13 +182,6 @@
       },
       onClickSearchBtn() {
         this.fetchList()
-      },
-      onSwitchEnableReceiveMsg(wxUser) {
-        enableOrNotReceiveMsg({ id: wxUser.id }).then(res => {
-          if (replyRes(res)) {
-            wxUser.enable_receive_msg = res.bData.enable_receive_msg
-          }
-        })
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {

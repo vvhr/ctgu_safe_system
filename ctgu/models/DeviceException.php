@@ -66,12 +66,6 @@ class DeviceException extends \yii\db\ActiveRecord
             },
             'users'=>function($model){
                 return $model->users;
-            },
-            'maintainRecord'=>function($model){
-                return $model->maintainRecord;
-            },
-            'homeUser' =>function($model) {
-                return $model->homeUser;
             }
         ];
         return $fields;
@@ -84,13 +78,5 @@ class DeviceException extends \yii\db\ActiveRecord
 
     public function getUsers(){
         return $this->hasMany(User::class, ['id'=>'user_id'])->viaTable('user_device', ['imei'=>'imei']);
-    }
-
-
-    public function getHomeUser() {
-        return $this->hasMany(HomeUser::class, ['imei' => 'imei']);
-    }
-    public function getMaintainRecord(){
-        return $this->hasMany(MaintainRecord::class, ['device_exception_id'=>'id']);
     }
 }

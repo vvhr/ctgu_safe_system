@@ -18,7 +18,7 @@ class DeviceController extends ParentController
      */
     public function actionIndex(){
         $params = \Yii::$app->request->getQueryParams();
-        $query = Device::find();
+        $query = Device::find()->joinWith('report');
         // 添加个人用户组为3筛选条件
         ActionTool::addGroup3UserIdFilter($query);
         // 添加地址筛选条件

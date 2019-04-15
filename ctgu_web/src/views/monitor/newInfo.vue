@@ -160,7 +160,7 @@
     searchType: null,
     illegal: 3000, // 预设功率、漏电流、温度阈值
     lc: 10,
-    t: 80
+    t: 65
   }
 
   export default {
