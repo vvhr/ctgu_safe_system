@@ -20,9 +20,7 @@
   import { setSetting } from '../../api/UserSetting'
   import { replyRes } from '../../utils/res'
 
-  const defaultRuleForm = {
-    default_address: ''
-  }
+  const defaultRuleForm = { default_address: '' }
   export default {
     components: { addressComponent },
     data() {

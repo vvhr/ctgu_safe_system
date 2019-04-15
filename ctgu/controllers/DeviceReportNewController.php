@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use app\customLibrary\ActionTool;
 use app\models\DeviceReportNew;
-use Yii;
 use app\controllers\parent\ParentController;
 
 class DeviceReportNewController extends ParentController
@@ -14,15 +13,10 @@ class DeviceReportNewController extends ParentController
         $query = DeviceReportNew::find()->joinWith(['device'])->joinWith(['user'])->where(['device.enable'=>1]);
         ActionTool::addGroup3UserIdFilter($query);
         ActionTool::addAddressFilter($query, $params);
-
         if(isset($params['username']) && !empty($params['username']))
             $query->andWhere(['like', 'user.username', trim($params['username'])]);
         if(isset($params['uuid']) && !empty($params['uuid']))
             $query->andWhere(['like', 'device_report_new.uuid', trim($params['uuid'])]);
-        if(isset($params['treatment_result']))
-            $query->andFilterWhere(['device_report_new.treatment_result'=>$params['treatment_result']]);
-        if(isset($params['eType']))
-            $query->andFilterWhere(['device_report_new.eType'=>$params['eType']]);
         if(isset($params['searchType'])) {
             // 当上报时间 < 当前时间 - 10分钟 时，判断为故障断线
             if($params['searchType'] == 1)
@@ -34,7 +28,6 @@ class DeviceReportNewController extends ParentController
             elseif($params['searchType'] == 3)
                 $query->andFilterWhere(['OR', ['>', 'lc', (float)$params['lc']], ['>', 't', (float)$params['t']*10]]);
         }
-        //return $query->createCommand()->getRawSql();
         return ActionTool::createActiveDataProvider($query, $params, 'uuid');
     }
 
@@ -46,15 +39,6 @@ class DeviceReportNewController extends ParentController
 //        ReportRealTimeOneObjTab2::closeOverPowerAppliance($params['uuid'], $realReportOne);
         return $realReportOne;
     }
-
-    // actionCloseOverPowerAppliance
-    public function actionCpa(){
-        $params = \Yii::$app->request->getQueryParams();
-        $realReportOne = DeviceReportNew::findOne(['uuid'=>$params['uuid']]);
-        // 临时增加关闭超过实时功率的电器
-        DeviceReportNew::closeOverPowerAppliance($params['uuid'], $realReportOne);
-    }
-
     /**
      * 获取设备总数
      * @return int

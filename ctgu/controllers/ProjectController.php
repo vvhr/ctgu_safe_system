@@ -5,7 +5,6 @@ use app\controllers\parent\ParentController;
 use app\customLibrary\ActionTool;
 use app\models\Device;
 use app\models\Project;
-use yii\data\ActiveDataProvider;
 
 class ProjectController extends ParentController
 {

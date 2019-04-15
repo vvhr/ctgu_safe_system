@@ -38,18 +38,15 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
 
         /*将UDP数据对象的ByteBuf转为byte[]:注意：首先是创建空数组时指定长度。然后是将buf传入这个空数组*/
         byte[] udpByteArr = new byte[udpByteBuf.readableBytes()];
+
         //？udpByteArr像一个缓冲寄存器，readBytes将读到的字节逐个存入该字节数组。
         udpByteBuf.readBytes(udpByteArr);
 
-        /*调试打印udp字节组*/
-        // // DebugUtil.println("-->UDP原始字节数组:" + FormatTool.bytes2String(udpByteArr));
-
         // 然后击转成16进制，打印
         String udpHexString = Hex.encodeHexString(udpByteArr);
-        // DebugUtil.println("-->UDP原始Hex字符串:" + udpHexString);
+
         // 解析原始字符到mb列表
         ArrayList<MessageBase> messageBases = this.parseRawDataToMBs(udpHexString);
-        // DebugUtil.println("-->解析结果：messageBases连了几个合法包：" + messageBases.size());
 
         // 解析mb合法数据
         for(MessageBase mb:messageBases){
@@ -86,11 +83,11 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
      * @return 返回验证通过的数据列表
      */
     private ArrayList<MessageBase> parseRawDataToMBs(String udpHexString){
-        // // DebugUtil.println("-->开始解析原生数据：");
+        // 解析原生数据
         ArrayList<MessageBase> messageBases = new ArrayList<>();
 
         try{
-            // 如果以ffff00开头，则处理
+            // 判断起始符
             if(udpHexString.indexOf("ffff") == 0){
                 // 将内容分段,连包的情况适合此法处理
                 String[] udpHexStringPieces = udpHexString.split("ffff");
@@ -98,26 +95,17 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
                 for(String udpHexStringPiece : udpHexStringPieces){
                     if(udpHexStringPiece.length()>=36){
                         udpHexStringPiece = "ffff"+udpHexStringPiece;
-                        // 将一个UPD记录的16进制字串转成字节数组
-                        // byte[] oneUdpRecordByteArr = Hex.decodeHex(udpHexStringPiece);
-                        // 本来报文长度是占2字节，应该是第3-4两个字节，这里只采第4个字节，因为第3个高位字节用不上，永远为0。第4个字节索引刚好是[3]
-                        // // DebugUtil.println("-->分段后，该报文长度（字节数）:" +  oneUdpRecordByteArr[3]);
-
                         // 如果报文中给出的长度==报文的实际长度，那么表示可进一步处理
                         String hexLength = AnalysisUtils.HexS2B(udpHexStringPiece.substring(4,8));
-                        // DebugUtil.println("udpHexStringPiece.length()/2:" + udpHexStringPiece.length()/2);
-                        // DebugUtil.println("Integer.valueOf(hexLength,16):" + Integer.valueOf(hexLength,16));
                         if((udpHexStringPiece.length()/2)==Integer.valueOf(hexLength,16)){
                             MessageBase msgBase = MessageBase.read(udpHexStringPiece);
-                            if(msgBase != null){  //&& msgBase.isPass()
+                            if(msgBase != null){
                                 messageBases.add(msgBase);
-                                // // DebugUtil.println("-->单条报文校验通过:" +  udpHexStringPiece);
                             }
                         }
                     }
                 }
             }
-            // DebugUtil.println("-->共计请求通过数:"+passNum+"   未通过数："+noPassNum + "-- 丢弃数：" +lose);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -135,7 +123,6 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
         /*报文类型*/
         int msgType = mb.messageType;
         if (msgType == MessageType.ReqAlert) {
-            // DebugUtil.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>实时参数/故障报文>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             reqAlertController(mb);
         }
     }
@@ -154,20 +141,11 @@ public class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket
             // 存表
             try (SqlSession session = MysqlUtil.createSession()) {
                 DeviceReportNewMapper mapper = session.getMapper(DeviceReportNewMapper.class);
-                // 报警上报存表
-                if (model.geteType() == 1) {
-                    mapper.insertException(model);
-                }
                 // 实时上报存表
                 model.setP(model.getV()/100 * model.getC()/100);
                 mapper.insertOrUpdate(model);
                 session.commit();
-                // 存mongoDB
-                /*Document doc = DeviceReportNew.convertModelToDoc(model);
-                MongoCollection<Document> collection = MongoDBUtil.mongoDatabase.getCollection("DeviceReportNewCollection");
-                collection.insertOne(doc);*/
             }
-            DebugUtil.println("--> :" + model);
         }
     }
 }
